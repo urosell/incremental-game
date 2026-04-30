@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conciencia de Clase</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="app">
+
+    <!-- PANEL IZQUIERDO -->
+    <div id="panel-izquierdo">
+      <div id="titulo">
+        <h1>✊ Conciencia de Clase</h1>
+        <p id="subtitulo">El pueblo, unido, jamás será vencido</p>
+        <button id="btn-revolucion" class="btn-revolucion oculto" onclick="abrirModal('modal-revolucion')">
+  🔴 Declarar la Revolución
+</button>
+<button class="btn-legado" onclick="abrirLegado()">📜 Legado</button>
+      </div>
+
+      <div id="usuario-panel">
+        <div id="usuario-info" class="oculto">
+          <img id="usuario-avatar" src="" alt="avatar" />
+          <span id="usuario-nombre"></span>
+          <button id="btn-logout" onclick="handleLogout()">Salir</button>
+        </div>
+        <button id="btn-login" onclick="handleLogin()">
+          Entrar con Google
+        </button>
+      </div>
+
+      <div id="recurso">
+        <div id="conciencia-display">0 ⚡</div>
+        <div id="ingreso-display">0 ⚡ / seg</div>
+        <div id="efecto-activo-display" class="efecto-activo"></div>
+      </div>
+
+      <div id="progreso-revolucion">
+        <div id="progreso-label">Camino a la Revolución</div>
+        <div id="progreso-barra-contenedor">
+          <div id="progreso-barra"></div>
+        </div>
+        <div id="progreso-texto">0 / 10.000B ⚡</div>
+      </div>
+
+      <!-- PRESIÓN CAPITALISTA (Fase 3) -->
+      <div id="presion-section">
+        <div class="presion-header">
+          <span id="presion-label">💼 Presión Capitalista</span>
+          <span id="presion-penalizacion" class="presion-penalizacion"></span>
+        </div>
+        <div id="presion-barra-contenedor">
+          <div id="presion-barra" class="presion-barra-fill presion-baja"></div>
+        </div>
+        <div id="presion-texto">0%</div>
+      </div>
+
+      <button id="btn-agitar">¡Agitar!</button>
+      <div id="agitar-info">+1 ⚡ por clic</div>
+
+      <!-- MEJORAS DE RESISTENCIA (Fase 3) -->
+      <div id="mejoras-resistencia-section">
+        <div class="seccion-titulo">🛡️ Resistencia al Capital</div>
+        <div id="mejoras-resistencia"></div>
+      </div>
+
+    </div>
+
+    <!-- PANEL DERECHO -->
+    <div id="panel-derecho">
+      <h2>Colectivos</h2>
+      <div id="lista-colectivos"></div>
+    </div>
+
+  </div>
+
+  <!-- NOTIFICACION NARRATIVA -->
+  <div id="notificacion" class="oculto">
+    <p id="notificacion-texto"></p>
+  </div>
+
+  <script type="module" src="firebase.js"></script>
+  <script type="module" src="game.js"></script>
+  <script>
+    function comprar(id) { window._comprar(id); }
+    function mejorar(id) { window._mejorar(id); }
+    function handleLogin() { window._handleLogin(); }
+    function handleLogout() { window._handleLogout(); }
+    function abrirModal(id) { window._abrirModal(id); }
+    function cerrarModal(id) { window._cerrarModal(id); }
+    function mostrarHeroes() { window._mostrarHeroes(); }
+    function abrirLegado() { window._abrirLegado(); }
+  </script>
+
+  <!-- MODAL REVOLUCIÓN -->
+  <div id="modal-revolucion" class="modal oculto">
+    <div class="modal-contenido">
+      <h2>🔴 Declarar la Revolución</h2>
+      <p class="modal-descripcion">Perderás toda tu Conciencia y tus colectivos. Pero el Legado Revolucionario permanecerá para siempre.</p>
+      <p class="modal-advertencia">¿Estás seguro?</p>
+      <div class="modal-botones">
+        <button class="btn-confirmar" onclick="mostrarHeroes()">Sí, declarar la Revolución</button>
+        <button class="btn-cancelar" onclick="cerrarModal('modal-revolucion')">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL HÉROES -->
+  <div id="modal-heroes" class="modal oculto">
+    <div class="modal-contenido">
+      <h2>✊ Elige tu Héroe</h2>
+      <p class="modal-descripcion">Su legado te acompañará en todas las revoluciones futuras.</p>
+      <div id="lista-heroes-seleccion"></div>
+    </div>
+  </div>
+
+  <!-- MODAL LEGADO -->
+  <div id="modal-legado" class="modal oculto">
+    <div class="modal-contenido">
+      <h2>📜 Legado Revolucionario</h2>
+      <p class="modal-descripcion" id="legado-revoluciones"></p>
+      <div id="lista-heroes-legado"></div>
+      <div class="modal-botones">
+        <button class="btn-cancelar" onclick="cerrarModal('modal-legado')">Cerrar</button>
+      </div>
+    </div>
+  </div>
+  <!-- MODAL EVENTO ALEATORIO (Fase 3) -->
+  <div id="modal-evento" class="modal oculto">
+    <div class="modal-contenido">
+      <h2 id="evento-titulo"></h2>
+      <p class="modal-descripcion" id="evento-texto"></p>
+      <div id="evento-situacion" class="evento-situacion"></div>
+      <div class="modal-botones" id="evento-botones"></div>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,660 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0f0f0f;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', sans-serif;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#app {
+  display: flex;
+  height: 100vh;
+}
+
+/* ── PANEL IZQUIERDO ── */
+#panel-izquierdo {
+  width: 300px;
+  min-width: 300px;
+  background: #141414;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  border-right: 1px solid #2a2a2a;
+}
+
+#titulo h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #f0f0f0;
+  margin-bottom: 6px;
+}
+
+#subtitulo {
+  font-size: 11px;
+  color: #555;
+  font-style: italic;
+}
+
+#recurso {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+#conciencia-display {
+  font-size: 32px;
+  font-weight: 700;
+  color: #ef4444;
+  margin-bottom: 4px;
+}
+
+#ingreso-display {
+  font-size: 13px;
+  color: #666;
+}
+
+#btn-agitar {
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 18px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.1s;
+  letter-spacing: 0.5px;
+}
+
+#btn-agitar:hover {
+  background: #dc2626;
+}
+
+#btn-agitar:active {
+  transform: scale(0.96);
+  background: #b91c1c;
+}
+
+#agitar-info {
+  font-size: 12px;
+  color: #555;
+  text-align: center;
+  margin-top: -12px;
+}
+
+/* ── PANEL DERECHO ── */
+#panel-derecho {
+  flex: 1;
+  padding: 32px 28px;
+  overflow-y: auto;
+}
+
+#panel-derecho h2 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+
+/* ── CARDS DE COLECTIVOS ── */
+.colectivo-card {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: border-color 0.2s;
+}
+
+.colectivo-card:hover {
+  border-color: #3a3a3a;
+}
+
+.colectivo-card.bloqueado {
+  opacity: 0.4;
+}
+
+.colectivo-info h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.colectivo-info .nivel-texto {
+  font-size: 12px;
+  color: #666;
+}
+
+.colectivo-info .produccion-texto {
+  font-size: 12px;
+  color: #ef4444;
+  margin-top: 2px;
+}
+
+.colectivo-acciones {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.btn-comprar {
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.btn-comprar:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+.btn-comprar:disabled {
+  background: #1f1f1f;
+  color: #444;
+  cursor: not-allowed;
+}
+
+.btn-mejorar {
+  background: transparent;
+  color: #facc15;
+  border: 1px solid #facc15;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.btn-mejorar:hover:not(:disabled) {
+  background: #facc1515;
+}
+
+.btn-mejorar:disabled {
+  color: #444;
+  border-color: #2a2a2a;
+  cursor: not-allowed;
+}
+
+/* ── NOTIFICACION NARRATIVA ── */
+#notificacion {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a1a1a;
+  border: 1px solid #ef4444;
+  border-radius: 12px;
+  padding: 16px 24px;
+  max-width: 480px;
+  text-align: center;
+  font-size: 14px;
+  color: #f0f0f0;
+  font-style: italic;
+  line-height: 1.5;
+  z-index: 100;
+  transition: opacity 0.5s;
+}
+
+#notificacion.oculto {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.oculto {
+  display: none !important;
+}
+
+.btn-revolucion {
+  background: transparent;
+  color: #ef4444;
+  border: 2px solid #ef4444;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  animation: pulsar 2s infinite;
+}
+
+.btn-revolucion:hover {
+  background: #ef444420;
+}
+
+@keyframes pulsar {
+  0%, 100% { border-color: #ef4444; }
+  50% { border-color: #7f1d1d; }
+}
+
+.btn-legado {
+  background: transparent;
+  color: #666;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-legado:hover {
+  color: #f0f0f0;
+  border-color: #444;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: #000000cc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.modal.oculto {
+  display: none;
+}
+
+.modal-contenido {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+}
+
+.modal-contenido h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #f0f0f0;
+}
+
+.modal-descripcion {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.modal-advertencia {
+  font-size: 16px;
+  color: #facc15;
+  margin-bottom: 24px;
+  font-weight: 600;
+}
+
+.modal-botones {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.btn-confirmar {
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-confirmar:hover {
+  background: #dc2626;
+}
+
+.btn-cancelar {
+  background: transparent;
+  color: #888;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-cancelar:hover {
+  color: #f0f0f0;
+  border-color: #555;
+}
+
+.heroe-card {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 10px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.heroe-card:hover {
+  border-color: #ef4444;
+}
+
+.heroe-card h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.heroe-card .heroe-colectivo {
+  font-size: 11px;
+  color: #ef4444;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.heroe-card .heroe-descripcion {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.heroe-card .heroe-frase {
+  font-size: 12px;
+  color: #555;
+  font-style: italic;
+}
+
+.legado-heroe {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+.legado-heroe h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.legado-heroe p {
+  font-size: 12px;
+  color: #888;
+}
+
+#progreso-revolucion {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#progreso-label {
+  font-size: 11px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#progreso-barra-contenedor {
+  width: 100%;
+  height: 6px;
+  background: #2a2a2a;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+#progreso-barra {
+  height: 100%;
+  width: 0%;
+  background: #ef4444;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+#progreso-texto {
+  font-size: 11px;
+  color: #555;
+  text-align: right;
+}
+
+/* ── FASE 3: PRESIÓN CAPITALISTA ── */
+#presion-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.presion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#presion-label {
+  font-size: 11px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#presion-barra-contenedor {
+  width: 100%;
+  height: 6px;
+  background: #2a2a2a;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.presion-barra-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  transition: width 0.5s ease, background-color 0.5s ease;
+}
+
+.presion-baja  { background: #22c55e; }
+.presion-media { background: #facc15; }
+.presion-alta  { background: #ef4444; animation: pulsar-presion 1s infinite; }
+
+@keyframes pulsar-presion {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.55; }
+}
+
+#presion-texto {
+  font-size: 11px;
+  color: #555;
+  text-align: right;
+}
+
+.presion-penalizacion { font-size: 10px; color: #555; }
+.presion-penalizacion.activa { color: #ef4444; font-weight: 600; }
+
+/* ── FASE 3: MANIFESTACIÓN ── */
+#btn-manifestacion {
+  background: transparent;
+  color: #f97316;
+  border: 1px solid #f97316;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+#btn-manifestacion:hover:not(:disabled) {
+  background: #f9731615;
+}
+
+#btn-manifestacion:disabled {
+  color: #444;
+  border-color: #2a2a2a;
+  cursor: not-allowed;
+}
+
+/* ── FASE 3: MEJORAS DE RESISTENCIA ── */
+#mejoras-resistencia-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.seccion-titulo {
+  font-size: 11px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mejora-resistencia {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.mejora-nombre {
+  font-size: 12px;
+  color: #888;
+  cursor: help;
+}
+
+.mejora-resistencia.comprada .mejora-nombre { color: #444; }
+
+.btn-mejora-resistencia {
+  background: transparent;
+  color: #22c55e;
+  border: 1px solid #22c55e;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.btn-mejora-resistencia:hover:not(:disabled) { background: #22c55e18; }
+
+.btn-mejora-resistencia:disabled {
+  color: #444;
+  border-color: #2a2a2a;
+  cursor: not-allowed;
+}
+
+/* ── FASE 3: EFECTO ACTIVO ── */
+#efecto-activo-display {
+  font-size: 11px;
+  margin-top: 4px;
+  min-height: 14px;
+  font-weight: 600;
+}
+
+.efecto-activo.positivo { color: #22c55e; }
+.efecto-activo.negativo { color: #ef4444; }
+
+/* ── FASE 3: MODAL EVENTO ── */
+.evento-situacion {
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 12px 0 20px;
+  font-size: 13px;
+  color: #ccc;
+  line-height: 1.7;
+  text-align: left;
+}
+
+.evento-situacion-texto { color: #ccc; }
+
+.evento-opcion { margin-bottom: 8px; font-size: 13px; color: #aaa; }
+.evento-opcion:last-child { margin-bottom: 0; }
+.evento-opcion strong { color: #f0f0f0; }
+.evento-opcion em { color: #facc15; font-style: normal; }
+
+#usuario-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#btn-login {
+  background: #fff;
+  color: #0f0f0f;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#btn-login:hover {
+  background: #e5e5e5;
+}
+
+#usuario-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+#usuario-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+#usuario-nombre {
+  font-size: 12px;
+  color: #888;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#btn-logout {
+  background: transparent;
+  color: #555;
+  border: none;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+#btn-logout:hover {
+  color: #ef4444;
+}
