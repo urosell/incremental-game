@@ -15,19 +15,20 @@
       <div id="titulo">
         <h1>✊ Conciencia de Clase</h1>
         <p id="subtitulo">El pueblo, unido, jamás será vencido</p>
-        <button id="btn-revolucion" class="btn-revolucion oculto" onclick="abrirModal('modal-revolucion')">
-  🔴 Declarar la Revolución
-</button>
-<button class="btn-legado" onclick="abrirLegado()">📜 Legado</button>
+        <button id="btn-revolucion" class="btn-revolucion oculto" data-accion="abrir-modal" data-arg="modal-revolucion">
+          🔴 Declarar la Revolución
+        </button>
+        <button class="btn-legado" data-accion="abrir-legado">📜 Legado</button>
+        <button class="btn-legado btn-arbol-acceso" data-accion="abrir-arbol-consulta">🔥 Árbol</button>
       </div>
 
       <div id="usuario-panel">
         <div id="usuario-info" class="oculto">
           <img id="usuario-avatar" src="" alt="avatar" />
           <span id="usuario-nombre"></span>
-          <button id="btn-logout" onclick="handleLogout()">Salir</button>
+          <button id="btn-logout" data-accion="handle-logout">Salir</button>
         </div>
-        <button id="btn-login" onclick="handleLogin()">
+        <button id="btn-login" data-accion="handle-login">
           Entrar con Google
         </button>
       </div>
@@ -61,20 +62,46 @@
       <button id="btn-agitar">¡Agitar!</button>
       <div id="agitar-info">+1 ⚡ por clic</div>
 
-      <!-- MEJORAS DE RESISTENCIA (Fase 3) -->
-      <div id="mejoras-resistencia-section">
-        <div class="seccion-titulo">🛡️ Resistencia al Capital</div>
-        <div id="mejoras-resistencia"></div>
+      <div id="huelga-section">
+        <button id="btn-huelga" data-accion="activar-huelga">🪧 Convocar Huelga</button>
+        <div id="huelga-info" class="huelga-info">30s activa · 2%/s · CD 90s</div>
       </div>
 
     </div>
 
-    <!-- PANEL DERECHO -->
+    <!-- PANEL CENTRAL — Colectivos -->
     <div id="panel-derecho">
       <h2>Colectivos</h2>
       <div id="lista-colectivos"></div>
     </div>
 
+    <!-- PANEL MEJORAS — Fijo derecha -->
+    <div id="panel-mejoras">
+      <div class="seccion-titulo">⚙️ Mejoras</div>
+      <div class="seccion-titulo" style="margin-top:16px">🛡️ Resistencia al Capital</div>
+      <div id="mejoras-resistencia"></div>
+      <div class="seccion-titulo" style="margin-top:20px">✊ Fuerza de Agitación</div>
+      <div id="mejoras-agitacion"></div>
+      <div class="seccion-titulo" style="margin-top:20px">🪧 Acción Directa</div>
+      <div id="mejoras-huelga"></div>
+    </div>
+
+  </div>
+
+  <!-- PANEL ÁRBOL REVOLUCIONARIO -->
+  <div id="panel-arbol-fondo" class="oculto" data-accion="cerrar-arbol-consulta"></div>
+  <div id="panel-arbol" class="panel-mejoras oculto-panel">
+    <div id="panel-arbol-cabecera">
+      <div>
+        <span>🔥 Árbol Revolucionario</span>
+        <span id="arbol-llamas-display" class="arbol-llamas-header">0 🔥</span>
+      </div>
+      <button id="btn-cerrar-arbol" class="btn-cerrar-mejoras" data-accion="cerrar-arbol-consulta" style="display:none">✕</button>
+    </div>
+    <div id="arbol-contenedor"></div>
+    <div id="panel-arbol-footer">
+      <button id="btn-comenzar-run" data-accion="comenzar-nueva-run">▶ Comenzar nueva partida</button>
+    </div>
   </div>
 
   <!-- NOTIFICACION NARRATIVA -->
@@ -83,17 +110,7 @@
   </div>
 
   <script type="module" src="firebase.js"></script>
-  <script type="module" src="game.js"></script>
-  <script>
-    function comprar(id) { window._comprar(id); }
-    function mejorar(id) { window._mejorar(id); }
-    function handleLogin() { window._handleLogin(); }
-    function handleLogout() { window._handleLogout(); }
-    function abrirModal(id) { window._abrirModal(id); }
-    function cerrarModal(id) { window._cerrarModal(id); }
-    function mostrarHeroes() { window._mostrarHeroes(); }
-    function abrirLegado() { window._abrirLegado(); }
-  </script>
+  <script type="module" src="main.js"></script>
 
   <!-- MODAL REVOLUCIÓN -->
   <div id="modal-revolucion" class="modal oculto">
@@ -102,8 +119,8 @@
       <p class="modal-descripcion">Perderás toda tu Conciencia y tus colectivos. Pero el Legado Revolucionario permanecerá para siempre.</p>
       <p class="modal-advertencia">¿Estás seguro?</p>
       <div class="modal-botones">
-        <button class="btn-confirmar" onclick="mostrarHeroes()">Sí, declarar la Revolución</button>
-        <button class="btn-cancelar" onclick="cerrarModal('modal-revolucion')">Cancelar</button>
+        <button class="btn-confirmar" data-accion="mostrar-heroes">Sí, declarar la Revolución</button>
+        <button class="btn-cancelar" data-accion="cerrar-modal" data-arg="modal-revolucion">Cancelar</button>
       </div>
     </div>
   </div>
@@ -117,15 +134,16 @@
     </div>
   </div>
 
-  <!-- MODAL LEGADO -->
-  <div id="modal-legado" class="modal oculto">
-    <div class="modal-contenido">
-      <h2>📜 Legado Revolucionario</h2>
-      <p class="modal-descripcion" id="legado-revoluciones"></p>
+  <!-- PANEL LEGADO -->
+  <div id="panel-legado-fondo" class="oculto" data-accion="cerrar-legado"></div>
+  <div id="panel-legado" class="oculto-panel">
+    <div id="panel-legado-cabecera">
+      <span>📜 Legado Revolucionario</span>
+      <button class="btn-cerrar-mejoras" data-accion="cerrar-legado">✕</button>
+    </div>
+    <div id="panel-legado-contenido">
+      <p id="legado-revoluciones" class="legado-revoluciones-texto"></p>
       <div id="lista-heroes-legado"></div>
-      <div class="modal-botones">
-        <button class="btn-cancelar" onclick="cerrarModal('modal-legado')">Cerrar</button>
-      </div>
     </div>
   </div>
   <!-- MODAL EVENTO ALEATORIO (Fase 3) -->
