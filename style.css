@@ -1,4 +1,14 @@
 /* ══════════════════════════════════════════
+   FUENTES PERSONALIZADAS
+   ══════════════════════════════════════════ */
+@font-face {
+  font-family: 'RedOctober';
+  src: url('fonts/RedOctoberLight.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* ══════════════════════════════════════════
    VARIABLES — toca aquí para cambiar el tema
    ══════════════════════════════════════════ */
 :root {
@@ -123,8 +133,9 @@ body {
 }
 
 #titulo h1 {
-  font-size: 20px;
-  font-weight: 700;
+  font-family: 'RedOctober', var(--fuente);
+  font-size: 22px;
+  font-weight: normal;
   color: var(--texto);
   margin-bottom: 0;
 }
