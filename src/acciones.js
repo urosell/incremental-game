@@ -22,6 +22,46 @@ import {
 } from "./ui/render-mejoras.js";
 
 // ─────────────────────────────────────────
+// EFECTO VISUAL — icono flotante al agitar
+// Para añadir imágenes: pon los archivos en Imagenes/Agitar/
+// y sustituye IMAGENES_AGITAR con sus rutas.
+// ─────────────────────────────────────────
+const IMAGENES_AGITAR = [
+  "Imagenes/Agitar/martillo.png",
+  "Imagenes/Agitar/hoz.png",
+];
+
+let _agitarIdx = 0;
+
+function spawnClickFx(x, y) {
+  // Cantidad = 2^nivel, con cap en 16 para no saturar la pantalla
+  const cantidad = Math.min(Math.pow(2, estado.nivelAgitacion), 16);
+
+  for (let i = 0; i < cantidad; i++) {
+    const el = document.createElement("div");
+    el.className = "clic-fx";
+
+    if (IMAGENES_AGITAR.length > 0) {
+      const img = document.createElement("img");
+      img.src = IMAGENES_AGITAR[_agitarIdx % IMAGENES_AGITAR.length];
+      _agitarIdx++;
+      el.appendChild(img);
+    } else {
+      el.textContent = "⚡";
+    }
+
+    // Dispersión aleatoria proporcional a la cantidad
+    const spread = Math.min(20 + cantidad * 8, 120);
+    const offsetX = (Math.random() - 0.5) * spread;
+    const offsetY = (Math.random() - 0.5) * spread * 0.4;
+    el.style.left = (x + offsetX) + "px";
+    el.style.top  = (y + offsetY) + "px";
+    document.body.appendChild(el);
+    el.addEventListener("animationend", () => el.remove());
+  }
+}
+
+// ─────────────────────────────────────────
 // AGITAR — clic manual
 // ─────────────────────────────────────────
 function agitar(e) {
@@ -29,6 +69,7 @@ function agitar(e) {
   const poder = obtenerPoderClic();
   estado.conciencia      += poder;
   estado.concienciaTotal += poder;
+  spawnClickFx(e.clientX, e.clientY);
   renderizar();
   guardarEstado();
   actualizarBotonRevolucion();

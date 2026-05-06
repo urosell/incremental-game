@@ -40,23 +40,24 @@ export const MEJORAS_HUELGA = [
 // ─────────────────────────────────────────
 export const MEJORAS_AGITACION = (() => {
   const niveles = [
-    { nivel: 1,  coste: 100,       poderClic: 2   },
-    { nivel: 2,  coste: 500,       poderClic: 4   },
-    { nivel: 3,  coste: 2000,      poderClic: 8   },
-    { nivel: 4,  coste: 8000,      poderClic: 15  },
-    { nivel: 5,  coste: 30000,     poderClic: 25  },
-    { nivel: 6,  coste: 100000,    poderClic: 40  },
-    { nivel: 7,  coste: 350000,    poderClic: 60  },
-    { nivel: 8,  coste: 1200000,   poderClic: 90  },
-    { nivel: 9,  coste: 4000000,   poderClic: 130 },
-    { nivel: 10, coste: 12000000,  poderClic: 180 },
-  ];
+    { nivel: 1,  coste: 100      },
+    { nivel: 2,  coste: 500      },
+    { nivel: 3,  coste: 2000     },
+    { nivel: 4,  coste: 8000     },
+    { nivel: 5,  coste: 30000    },
+    { nivel: 6,  coste: 100000   },
+    { nivel: 7,  coste: 350000   },
+    { nivel: 8,  coste: 1200000  },
+    { nivel: 9,  coste: 4000000  },
+    { nivel: 10, coste: 12000000 },
+  ].map(n => ({ ...n, poderClic: Math.pow(2, n.nivel) }));
+
   for (let n = 11; n <= 100; n++) {
     const prev = niveles[niveles.length - 1];
     niveles.push({
-      nivel:    n,
-      coste:    Math.floor(prev.coste    * 3.2),
-      poderClic: Math.floor(prev.poderClic * 1.4),
+      nivel:     n,
+      coste:     Math.floor(prev.coste * 3.2),
+      poderClic: Math.pow(2, n),
     });
   }
   return niveles;

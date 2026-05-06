@@ -8,6 +8,7 @@ import { guardarEstado } from "./core/persistencia.js";
 import { renderizar, actualizarBotonRevolucion } from "./ui/render.js";
 import { tickPresion } from "./sistemas/presion.js";
 import { activarHuelga } from "./sistemas/huelga.js";
+import { tickQte } from "./sistemas/qte.js";
 // import { verificarEventos } from "./sistemas/eventos.js"; // pendiente de reactivar
 
 // Cada 50 ticks (5s) se persiste el estado a disco/nube.
@@ -33,6 +34,9 @@ export function iniciarBucle() {
 
     // Presión capitalista
     tickPresion(DT);
+
+    // Quick Time Event (desactivado temporalmente)
+    // tickQte();
 
     // Auto-activar huelga si la mejora está comprada
     if (obtenerStatsHuelga().auto) {

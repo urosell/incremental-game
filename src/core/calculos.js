@@ -12,13 +12,14 @@ import {
   HUELGA_COOLDOWN_BASE,
   HUELGA_REDUCCION_BASE,
 } from "../config/balance.js";
+import { getQteMultiplicador } from "../sistemas/qte.js";
 
 // ─────────────────────────────────────────
 // FORMATEAR NÚMEROS
 // ─────────────────────────────────────────
 export function formatear(n) {
-  if (n >= 1_000_000_000) return (n / 1_000_000_000).toFixed(2) + "B";
-  if (n >= 1_000_000)     return (n / 1_000_000).toFixed(2) + " millones";
+  if (n >= 1_000_000_000) return (n / 1_000_000_000).toFixed(3) + " billones";
+  if (n >= 1_000_000)     return (n / 1_000_000).toFixed(3) + " millones";
   if (n >= 1_000)         return Math.floor(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   if (n < 10)             return n.toFixed(2);
   return n.toFixed(1);
@@ -89,6 +90,7 @@ export function obtenerPoderClic() {
   }
   if (estado.heroes.includes("freire")) poder *= 2;
   poder *= obtenerBonusArbol().multClic;
+  poder *= getQteMultiplicador();
   return poder;
 }
 
