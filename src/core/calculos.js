@@ -3,6 +3,7 @@
 // ─────────────────────────────────────────
 import { estado, legado } from "./estado.js";
 import { COLECTIVOS } from "../data/colectivos.js";
+import { COLS_PROD, PROD_BONUSES } from "../data/arbol.js";
 import { MEJORAS_AGITACION } from "../data/mejoras.js";
 import {
   LLAMAS_DIVISOR,
@@ -35,12 +36,20 @@ export function calcularLlamas(concienciaTotal) {
 // ─────────────────────────────────────────
 // ÁRBOL — bonificaciones derivadas de los nodos comprados
 // ─────────────────────────────────────────
+// Bonus de producción del árbol para un colectivo concreto (por índice)
+export function getBonusProduccionArbol(colIdx) {
+  const col = COLS_PROD.find(c => c.colIdx === colIdx);
+  if (!col) return 1;
+  let bonus = 1;
+  PROD_BONUSES.forEach((b, i) => {
+    if (legado.nodos.includes(`prod-${col.id}-${i + 1}`)) bonus += b;
+  });
+  return bonus;
+}
+
 export function obtenerBonusArbol() {
   const n = legado.nodos;
-  let multProduccion = 1;
-  if (n.includes("prod-1")) multProduccion *= 1.05;
-  if (n.includes("prod-2")) multProduccion *= 1.10;
-  if (n.includes("prod-3")) multProduccion *= 1.20;
+  // multProduccion retirado — ahora es por colectivo vía getBonusProduccionArbol()
 
   let multClic = 1;
   if (n.includes("agit-1")) multClic *= 1.5;
@@ -51,7 +60,7 @@ export function obtenerBonusArbol() {
   const descuentoMejoras    = n.includes("res-2") ? 0.15 : 0;
   const reduccionPresion    = n.includes("res-3") ? 0.25 : 0;
 
-  return { multProduccion, multClic, descuentoColectivos, descuentoMejoras, reduccionPresion };
+  return { multClic, descuentoColectivos, descuentoMejoras, reduccionPresion };
 }
 
 // ─────────────────────────────────────────
@@ -90,6 +99,7 @@ export function obtenerPoderClic() {
   }
   if (estado.heroes.includes("freire")) poder *= 2;
   poder *= obtenerBonusArbol().multClic;
+  if (legado.nodos.includes("agit-5")) poder += estado.heroes.length * 10;
   poder *= getQteMultiplicador();
   return poder;
 }
@@ -145,13 +155,13 @@ export function calcularIngreso() {
                          estado.efectoTemporal.expira > Date.now())
                         ? estado.efectoTemporal.mult : 1;
 
-  const bonusArbol = obtenerBonusArbol();
   estado.concienciaPorSegundo = estado.colectivos.reduce((total, col) => {
     if (col.nivel === 0) return total;
     const datos = COLECTIVOS[col.id];
     let produccion = datos.ingresoPorSegundo * col.nivel;
     if (estado.heroes.includes("dolores") && col.id === 3) produccion *= 1.5;
     if (estado.heroes.includes("tesla")   && col.id === 6) produccion *= 2;
+    produccion *= getBonusProduccionArbol(col.id);
     return total + produccion;
-  }, 0) * multiplicador * penPresion * multEvento * bonusArbol.multProduccion;
+  }, 0) * multiplicador * penPresion * multEvento;
 }

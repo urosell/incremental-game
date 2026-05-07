@@ -9,7 +9,7 @@ import {
   costeMejora,
   obtenerMultiplicador,
   obtenerPenalizacionPresion,
-  obtenerBonusArbol,
+  getBonusProduccionArbol,
 } from "../core/calculos.js";
 
 export function renderizarColectivos() {
@@ -31,7 +31,7 @@ export function renderizarColectivos() {
       if (estado.heroes.includes("tesla")   && col.id === 6) p *= 2;
       p *= obtenerMultiplicador();
       p *= obtenerPenalizacionPresion();
-      p *= obtenerBonusArbol().multProduccion;
+      p *= getBonusProduccionArbol(col.id);
       if (estado.efectoTemporal?.tipo === "produccion" && estado.efectoTemporal.expira > Date.now()) {
         p *= estado.efectoTemporal.mult;
       }
