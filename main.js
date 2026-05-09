@@ -73,6 +73,8 @@ const acciones = {
   // Auth
   "handle-login":              () => handleLogin(),
   "handle-logout":             () => handleLogout(),
+  // Navegación mobile
+  "cambiar-tab":               (arg) => cambiarTab(arg),
 };
 
 document.body.addEventListener("click", (e) => {
@@ -81,6 +83,46 @@ document.body.addEventListener("click", (e) => {
   const fn = acciones[el.dataset.accion];
   if (fn) fn(el.dataset.arg);
 });
+
+// ─────────────────────────────────────────
+// NAVEGACIÓN MOBILE — cambio de tabs
+// ─────────────────────────────────────────
+function cambiarTab(tab) {
+  // ── 1. Marcar tab activo en la barra ──
+  document.querySelectorAll(".nav-tab").forEach(btn => btn.classList.remove("tab-activo"));
+  document.querySelector(`.nav-tab[data-arg="${tab}"]`)?.classList.add("tab-activo");
+
+  // ── 2. Paneles principales (inicio / colectivos / mejoras) ──
+  document.getElementById("panel-izquierdo").classList.toggle("tab-activo", tab === "inicio");
+  document.getElementById("panel-derecho").classList.toggle("tab-activo",   tab === "colectivos");
+  document.getElementById("panel-mejoras").classList.toggle("tab-activo",   tab === "mejoras");
+
+  // ── 3. Árbol ──
+  const panelArbol = document.getElementById("panel-arbol");
+  if (tab === "arbol") {
+    abrirArbolConsulta();            // renderiza contenido + quita oculto-panel
+    panelArbol.classList.add("tab-activo");
+  } else {
+    panelArbol.classList.remove("tab-activo");
+    panelArbol.classList.add("oculto-panel");
+  }
+
+  // ── 4. Legado ──
+  const panelLegado = document.getElementById("panel-legado");
+  if (tab === "legado") {
+    abrirLegado();                   // rellena héroes + quita oculto-panel
+    panelLegado.classList.add("tab-activo");
+  } else {
+    panelLegado.classList.remove("tab-activo");
+    panelLegado.classList.add("oculto-panel");
+  }
+
+  // ── 5. Ajustes ──
+  const panelAjustes = document.getElementById("panel-ajustes");
+  if (panelAjustes) {
+    panelAjustes.classList.toggle("tab-activo", tab === "ajustes");
+  }
+}
 
 // ─────────────────────────────────────────
 // INICIALIZACIÓN

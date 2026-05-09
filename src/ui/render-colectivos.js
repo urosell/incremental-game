@@ -13,8 +13,10 @@ import {
 } from "../core/calculos.js";
 
 export function renderizarColectivos() {
-  const lista = document.getElementById("lista-colectivos");
+  const lista    = document.getElementById("lista-colectivos");
+  const listaMov = document.getElementById("lista-colectivos-movil");
   lista.innerHTML = "";
+  if (listaMov) listaMov.innerHTML = "";
 
   estado.colectivos.forEach(col => {
     const datos       = COLECTIVOS[col.id];
@@ -78,5 +80,6 @@ export function renderizarColectivos() {
       `;
     }
     lista.appendChild(card);
+    if (listaMov) listaMov.appendChild(card.cloneNode(true));
   });
 }

@@ -14,65 +14,78 @@
   <div id="app">
 
     <!-- PANEL IZQUIERDO -->
-    <div id="panel-izquierdo">
-      <div id="titulo">
-        <h1>★ Class Rising</h1>
-        <p id="subtitulo">El pueblo, unido, jamás será vencido</p>
-        <button id="btn-revolucion" class="btn-revolucion oculto" data-accion="abrir-modal" data-arg="modal-revolucion">
-          🔴 Declarar la Revolución
-        </button>
-        <button class="btn-legado" data-accion="abrir-legado">📜 Legado</button>
-        <button class="btn-legado btn-arbol-acceso" data-accion="abrir-arbol-consulta">🔥 Árbol</button>
-      </div>
+    <div id="panel-izquierdo" class="tab-activo">
 
-      <div id="usuario-panel">
-        <div id="usuario-info" class="oculto">
-          <img id="usuario-avatar" src="" alt="avatar" />
-          <span id="usuario-nombre"></span>
-          <button id="btn-logout" data-accion="handle-logout">Salir</button>
+      <!-- ── HEADER: título + stats (fijo arriba en mobile) ── -->
+      <div class="inicio-header">
+        <div id="titulo">
+          <button id="btn-revolucion" class="btn-revolucion oculto" data-accion="abrir-modal" data-arg="modal-revolucion" title="Declarar la Revolución">
+            <img src="Imagenes/Declarar_Revolucion.png" alt="Declarar la Revolución" class="btn-revolucion-icono">
+          </button>
+          <h1>★ Class Rising</h1>
+          <p id="subtitulo">El pueblo, unido, jamás será vencido</p>
+          <button class="btn-legado" data-accion="abrir-legado">📜 Legado</button>
+          <button class="btn-legado btn-arbol-acceso" data-accion="abrir-arbol-consulta">🔥 Árbol</button>
         </div>
-        <button id="btn-login" data-accion="handle-login">
-          Entrar con Google
-        </button>
-      </div>
 
-      <div id="recurso">
-        <div id="conciencia-display">0 ⚡</div>
-        <div id="ingreso-display">0 ⚡ / seg</div>
-        <div id="efecto-activo-display" class="efecto-activo"></div>
-      </div>
-
-      <div id="progreso-revolucion">
-        <div id="progreso-label">Camino a la Revolución</div>
-        <div id="progreso-barra-contenedor">
-          <div id="progreso-barra"></div>
+        <div id="usuario-panel">
+          <div id="usuario-info" class="oculto">
+            <img id="usuario-avatar" src="" alt="avatar" />
+            <span id="usuario-nombre"></span>
+            <button id="btn-logout" data-accion="handle-logout">Salir</button>
+          </div>
+          <button id="btn-login" data-accion="handle-login">
+            Entrar con Google
+          </button>
         </div>
-        <div id="progreso-texto">0 / 10.000B ⚡</div>
+
+        <div id="recurso">
+          <div id="conciencia-display">0 ⚡</div>
+        </div>
+        <div id="ingreso-display" style="display:none">0 ⚡ / seg</div>
+        <div id="efecto-activo-display" class="efecto-activo" style="display:none"></div>
+
+        <div id="progreso-revolucion">
+          <div id="progreso-label">Camino a la Revolución</div>
+          <div id="progreso-barra-contenedor">
+            <div id="progreso-barra"></div>
+          </div>
+          <div id="progreso-texto">0 / 10.000B ⚡</div>
+        </div>
+
+        <!-- PRESIÓN CAPITALISTA (Fase 3) -->
+        <div id="presion-section">
+          <div class="presion-header">
+            <span id="presion-label">💼 Presión Capitalista</span>
+            <span id="presion-penalizacion" class="presion-penalizacion"></span>
+          </div>
+          <div id="presion-barra-contenedor">
+            <div id="presion-barra" class="presion-barra-fill presion-baja"></div>
+          </div>
+          <div id="presion-texto">0%</div>
+        </div>
       </div>
 
-      <!-- PRESIÓN CAPITALISTA (Fase 3) -->
-      <div id="presion-section">
-        <div class="presion-header">
-          <span id="presion-label">💼 Presión Capitalista</span>
-          <span id="presion-penalizacion" class="presion-penalizacion"></span>
-        </div>
-        <div id="presion-barra-contenedor">
-          <div id="presion-barra" class="presion-barra-fill presion-baja"></div>
-        </div>
-        <div id="presion-texto">0%</div>
+      <!-- ── COLECTIVOS: área scrollable (solo mobile) ── -->
+      <div class="inicio-colectivos-scroll">
+        <div id="lista-colectivos-movil"></div>
       </div>
 
-      <button id="btn-agitar">¡Agitar!</button>
-      <div id="agitar-info">+1 ⚡ por clic</div>
-
-      <div id="huelga-section">
-        <button id="btn-huelga" data-accion="activar-huelga">🪧 Convocar Huelga</button>
-        <div id="huelga-info" class="huelga-info">30s activa · 2%/s · CD 90s</div>
+      <!-- ── FOOTER: huelga (izq) + agitar (dcha) ── -->
+      <div class="inicio-footer">
+        <div id="huelga-section">
+          <button id="btn-huelga" data-accion="activar-huelga">🪧 Huelga</button>
+          <div id="huelga-info" class="huelga-info">30s · CD 90s</div>
+        </div>
+        <div class="inicio-agitar-bloque">
+          <button id="btn-agitar">¡Agitar!</button>
+          <div id="agitar-info">+1 ⚡</div>
+        </div>
       </div>
 
     </div>
 
-    <!-- PANEL CENTRAL — Colectivos -->
+    <!-- PANEL CENTRAL — Colectivos (solo desktop) -->
     <div id="panel-derecho">
       <h2>Colectivos</h2>
       <div id="lista-colectivos"></div>
@@ -119,6 +132,30 @@
     <p id="qte-popup-frase"></p>
   </div>
 
+  <!-- NAVEGACIÓN MÓVIL — barra de tabs inferior -->
+  <nav id="nav-mobile">
+    <button class="nav-tab tab-activo" data-accion="cambiar-tab" data-arg="inicio">
+      <span class="nav-tab-icon">✊</span>
+      <span class="nav-tab-label">Inicio</span>
+    </button>
+    <button class="nav-tab" data-accion="cambiar-tab" data-arg="mejoras">
+      <span class="nav-tab-icon">⚙️</span>
+      <span class="nav-tab-label">Mejoras</span>
+    </button>
+    <button class="nav-tab" data-accion="cambiar-tab" data-arg="arbol">
+      <span class="nav-tab-icon">🔥</span>
+      <span class="nav-tab-label">Árbol</span>
+    </button>
+    <button class="nav-tab" data-accion="cambiar-tab" data-arg="legado">
+      <span class="nav-tab-icon">📜</span>
+      <span class="nav-tab-label">Legado</span>
+    </button>
+    <button class="nav-tab" data-accion="cambiar-tab" data-arg="ajustes">
+      <span class="nav-tab-icon">⚙️</span>
+      <span class="nav-tab-label">Ajustes</span>
+    </button>
+  </nav>
+
   <script type="module" src="firebase.js"></script>
   <script type="module" src="main.js"></script>
 
@@ -156,6 +193,68 @@
       <div id="lista-heroes-legado"></div>
     </div>
   </div>
+  <!-- PANEL AJUSTES -->
+  <div id="panel-ajustes">
+    <div class="ajustes-cabecera">⚙ Ajustes</div>
+
+    <!-- ── Cuenta ── -->
+    <div class="ajustes-seccion">
+      <div class="ajustes-seccion-titulo">👤 Cuenta</div>
+
+      <!-- Estado: no conectado -->
+      <div id="ajustes-desconectado">
+        <p class="ajustes-texto-cuenta">Conecta tu cuenta de Google para guardar tu partida en la nube y recuperarla en cualquier dispositivo.</p>
+        <button id="ajustes-btn-login" class="ajustes-btn-google" data-accion="handle-login">
+          <span class="ajustes-google-icon">G</span> Entrar con Google
+        </button>
+      </div>
+
+      <!-- Estado: conectado (oculto por defecto) -->
+      <div id="ajustes-usuario-info" class="oculto">
+        <div class="ajustes-perfil-fila">
+          <img id="ajustes-usuario-avatar" src="" alt="avatar" class="ajustes-avatar" />
+          <div class="ajustes-perfil-datos">
+            <span id="ajustes-usuario-nombre" class="ajustes-usuario-nombre"></span>
+            <span class="ajustes-usuario-estado">✓ Partida sincronizada</span>
+          </div>
+        </div>
+        <button class="ajustes-btn-logout" data-accion="handle-logout">Cerrar sesión</button>
+      </div>
+    </div>
+
+    <!-- ── Audio ── -->
+    <div class="ajustes-seccion">
+      <div class="ajustes-seccion-titulo">🔊 Audio</div>
+      <div class="ajustes-fila">
+        <span class="ajustes-label">Música</span>
+        <button class="ajustes-toggle ajustes-toggle-off" disabled title="Próximamente">
+          <span class="ajustes-toggle-thumb"></span>
+        </button>
+      </div>
+      <div class="ajustes-fila">
+        <span class="ajustes-label">Efectos de sonido</span>
+        <button class="ajustes-toggle ajustes-toggle-off" disabled title="Próximamente">
+          <span class="ajustes-toggle-thumb"></span>
+        </button>
+      </div>
+      <p class="ajustes-aviso">Disponible en próxima actualización</p>
+    </div>
+
+    <!-- ── Idioma ── -->
+    <div class="ajustes-seccion">
+      <div class="ajustes-seccion-titulo">🌐 Idioma</div>
+      <div class="ajustes-idiomas">
+        <button class="ajustes-idioma-btn ajustes-idioma-activo" disabled>🇪🇸 Español</button>
+        <button class="ajustes-idioma-btn" disabled title="Próximamente">🇬🇧 English</button>
+        <button class="ajustes-idioma-btn" disabled title="Próximamente">🇫🇷 Français</button>
+      </div>
+      <p class="ajustes-aviso">Más idiomas próximamente</p>
+    </div>
+
+    <!-- Versión -->
+    <div class="ajustes-version">Class Rising · v0.5.0-alpha</div>
+  </div>
+
   <!-- MODAL EVENTO ALEATORIO (Fase 3) -->
   <div id="modal-evento" class="modal oculto">
     <div class="modal-contenido">

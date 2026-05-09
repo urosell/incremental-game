@@ -11,6 +11,22 @@
 }
 
 /* ══════════════════════════════════════════
+   WRAPPERS INICIO — desktop: transparentes
+   ══════════════════════════════════════════ */
+
+/* En desktop los wrappers son invisibles:
+   sus hijos participan directamente en el layout del panel */
+.inicio-header,
+.inicio-footer {
+  display: contents;
+}
+
+/* El scroll de colectivos solo existe en mobile */
+.inicio-colectivos-scroll {
+  display: none;
+}
+
+/* ══════════════════════════════════════════
    VARIABLES — SOVIET CONSTRUCTIVIST PALETTE
    ══════════════════════════════════════════ */
 :root {
@@ -223,6 +239,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  position: relative; /* ancla el btn-revolucion absoluto */
 }
 
 #titulo h1 {
@@ -268,8 +285,12 @@ body {
   border-top: 1px solid var(--borde);
   border-right: 1px solid var(--borde);
   border-bottom: 1px solid var(--borde);
-  padding: 14px 14px 14px 16px;
+  padding: 8px 12px 8px 14px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Estrella constructivista en esquina */
@@ -287,20 +308,16 @@ body {
 
 #conciencia-display {
   font-family: var(--fuente-titulo);
-  font-size: 36px;
+  font-size: 48px;
   font-weight: normal;
   color: var(--sc-red-bright);
   line-height: 1;
   letter-spacing: 0.02em;
   text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
-  margin-bottom: 4px;
 }
 
 #ingreso-display {
-  font-family: var(--fuente-mono);
-  font-size: 11px;
-  color: var(--sc-dark-gold);
-  letter-spacing: 0.10em;
+  display: none;
 }
 
 /* ══════════════════════════════════════════
@@ -573,22 +590,31 @@ body {
    BOTONES CABECERA
    ══════════════════════════════════════════ */
 .btn-revolucion {
+  position: absolute;
+  top: 0;
+  right: 0;
   background: transparent;
-  color: var(--sc-red-bright);
-  border: 2px solid var(--sc-red);
-  padding: 12px;
-  font-family: var(--fuente-titulo);
-  font-size: 13px;
+  border: none;
+  padding: 4px;
   cursor: pointer;
-  transition: all 0.2s;
   animation: pulsar 2s infinite;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  width: 100%;
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+  line-height: 0;
+  z-index: 10;
 }
 
-.btn-revolucion:hover { background: var(--rojo-glow); }
+.btn-revolucion-icono {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 0 6px var(--sc-red));
+  transition: filter 0.2s, transform 0.15s;
+}
+
+.btn-revolucion:hover .btn-revolucion-icono {
+  filter: drop-shadow(0 0 12px var(--sc-red-bright));
+  transform: scale(1.08);
+}
 
 .btn-legado {
   background: transparent;
@@ -1782,4 +1808,595 @@ body {
 .btn-cerrar-mejoras:hover {
   color: var(--sc-red-bright);
   border-color: var(--sc-red);
+}
+
+/* ══════════════════════════════════════════
+   NAV MOBILE — oculto en desktop
+   ══════════════════════════════════════════ */
+#nav-mobile { display: none; }
+
+/* ══════════════════════════════════════════
+   MOBILE — layout por tabs (< 1024px)
+   ══════════════════════════════════════════ */
+@media (max-width: 1024px) {
+
+  /* ── Layout raíz ── */
+  body { overflow: hidden; }
+
+  #app {
+    flex-direction: column;
+    height: calc(100dvh - 60px - env(safe-area-inset-bottom));
+  }
+
+  /* ── Paneles: apilados, solo el activo es visible ── */
+  #panel-izquierdo,
+  #panel-derecho,
+  #panel-mejoras {
+    display: none;
+    width: 100%;
+    min-width: unset;
+    height: 100%;
+    border: none;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #panel-izquierdo.tab-activo,
+  #panel-derecho.tab-activo,
+  #panel-mejoras.tab-activo {
+    display: flex;
+  }
+
+  /* ── Panel izquierdo en mobile: flex column sin overflow propio ── */
+  #panel-izquierdo {
+    flex-direction: column;
+    padding: 0;
+    gap: 0;
+    border-right: none;
+    overflow: hidden; /* el scroll lo gestiona .inicio-colectivos-scroll */
+  }
+
+  /* Quitar decoración de franja superior */
+  #panel-izquierdo::after { display: none; }
+
+  /* Header: stats fijos arriba */
+  .inicio-header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 0 0 auto;
+    padding: 16px 16px 12px;
+    border-bottom: 2px solid var(--borde-sutil);
+    background: var(--bg-base);
+  }
+
+  /* Área scrollable de colectivos */
+  .inicio-colectivos-scroll {
+    display: block;
+    flex: 1 1 0;
+    min-height: 0; /* clave para que flex + overflow-y funcione */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 12px 14px;
+  }
+
+  #lista-colectivos-movil {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* Footer: huelga izq + agitar dcha */
+  .inicio-footer {
+    display: flex;
+    flex-direction: row;
+    flex: 0 0 100px;
+    height: 100px;
+    gap: 8px;
+    padding: 8px 12px;
+    border-top: 2px solid var(--borde-sutil);
+    background: var(--bg-panel);
+  }
+
+  #huelga-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: stretch;
+  }
+
+  #btn-huelga {
+    width: 100%;
+    font-size: 13px;
+    padding: 10px 6px;
+  }
+
+  #huelga-info {
+    text-align: center;
+    font-size: 10px;
+    color: var(--sc-gold);
+  }
+
+  .inicio-agitar-bloque {
+    flex: 1;
+    height: 84px; /* footer 100px - padding 8px*2 */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .inicio-agitar-bloque #btn-agitar {
+    flex: 4;          /* ~80% del espacio */
+    width: 100%;
+    min-height: 0 !important;
+    padding: 0 !important;
+    font-size: 20px !important;
+  }
+
+  .inicio-agitar-bloque #agitar-info {
+    flex: 1;          /* ~20% del espacio */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--fuente-mono);
+    font-size: 13px;
+    color: var(--sc-gold);
+    letter-spacing: 0.05em;
+    margin-top: 0;    /* cancela el -10px global */
+  }
+
+  /* ── Panel central (colectivos) en mobile: nunca visible (está en inicio) ── */
+  #panel-derecho {
+    display: none !important;
+  }
+
+  #lista-colectivos {
+    grid-template-columns: 1fr;
+  }
+
+  /* ── Panel mejoras en mobile ── */
+  #panel-mejoras {
+    padding: 18px 14px;
+    flex-direction: column;
+    border-left: none;
+  }
+
+  #panel-mejoras::after { display: none; }
+
+  /* ── Árbol y Legado: tabs normales en mobile (no overlays) ── */
+  #panel-arbol,
+  #panel-legado {
+    position: fixed;
+    inset: 0 0 calc(60px + env(safe-area-inset-bottom)) 0;
+    width: 100%;
+    height: auto;
+    transform: none !important;  /* cancela oculto-panel slide */
+    transition: none;
+    display: none;               /* oculto por defecto */
+    border-radius: 0;
+    box-shadow: none;
+    border-left: none;
+    border-top: 3px solid var(--sc-red);
+  }
+
+  #panel-arbol.tab-activo,
+  #panel-legado.tab-activo {
+    display: flex;
+  }
+
+  /* Backdrops: nunca en mobile */
+  #panel-arbol-fondo,
+  #panel-legado-fondo {
+    display: none !important;
+  }
+
+  /* Ocultar el bloque de usuario del panel izquierdo en mobile —
+     la cuenta se gestiona desde Ajustes */
+  #usuario-panel {
+    display: none;
+  }
+
+  /* Botones Legado y Árbol del panel inicio — redundantes en mobile
+     porque ya existen las tabs específicas en la barra de navegación */
+  .btn-legado,
+  .btn-arbol-acceso {
+    display: none;
+  }
+
+  /* Compactar el título en el header de mobile */
+  #titulo h1 {
+    font-size: 28px;
+    margin-bottom: 2px;
+  }
+
+  #titulo #subtitulo {
+    font-size: 11px;
+    margin-bottom: 0;
+  }
+
+  #titulo {
+    gap: 4px;
+    padding-bottom: 0;
+  }
+
+  /* Botón revolución — icono pequeño top-right, mismo tamaño en mobile */
+  .btn-revolucion-icono {
+    width: 42px;
+    height: 42px;
+  }
+
+  /* Árbol: contenedor en columna única */
+  #arbol-contenedor {
+    grid-template-columns: 1fr;
+    padding: 20px 16px;
+    gap: 14px;
+  }
+
+  /* Legado: scroll interno */
+  #panel-legado-contenido {
+    padding: 16px 18px 24px;
+  }
+
+
+  /* ── Cards colectivos más compactas ── */
+  .colectivo-card { padding: 10px 12px; }
+  .colectivo-nombre { font-size: 13px; }
+  .colectivo-icono-wrap { width: 40px; min-width: 40px; height: 40px; }
+
+  /* ── Título más compacto ── */
+  #titulo h1 { font-size: 24px; }
+
+  /* ── Conciencia display en mobile ── */
+  #conciencia-display { font-size: 42px; }
+
+  /* ── Modales full width en mobile ── */
+  .modal-contenido {
+    width: 95%;
+    padding: 24px 18px;
+  }
+
+  /* ── Árbol rama: layout lineal ── */
+  .arbol-rama { width: 100%; }
+  .arbol-nodo { width: 100%; }
+
+  /* ── NAV MOBILE ── */
+  #nav-mobile {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(60px + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
+    background: var(--bg-panel);
+    border-top: 3px solid var(--sc-red);
+    z-index: 300;
+    align-items: stretch;
+  }
+
+  .nav-tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    background: transparent;
+    border: none;
+    border-right: 1px solid var(--borde);
+    cursor: pointer;
+    padding: 8px 4px;
+    color: var(--texto-4);
+    transition: background 0.15s, color 0.15s;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .nav-tab:last-child { border-right: none; }
+
+  .nav-tab.tab-activo {
+    color: var(--sc-red-bright);
+    background: rgba(200, 33, 26, 0.08);
+  }
+
+  /* Indicador dorado arriba del tab activo */
+  .nav-tab.tab-activo::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--sc-gold);
+  }
+
+  .nav-tab-icon {
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .nav-tab-label {
+    font-family: var(--fuente-titulo);
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    line-height: 1;
+  }
+}
+
+/* ══════════════════════════════════════════
+   PANEL AJUSTES — oculto en desktop, tab en mobile
+   ══════════════════════════════════════════ */
+
+/* Desktop: oculto — los ajustes sólo tienen sentido en mobile por ahora */
+#panel-ajustes {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  #panel-ajustes {
+    position: fixed;
+    inset: 0 0 calc(60px + env(safe-area-inset-bottom)) 0;
+    z-index: 200;
+    display: none;          /* hidden by default, shown via tab-activo */
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    overflow-y: auto;
+    background: var(--bg-base);
+    border-top: 3px solid var(--sc-red);
+    transform: none !important;
+    transition: none;
+  }
+
+  #panel-ajustes.tab-activo {
+    display: flex;
+  }
+
+  /* Cabecera del panel */
+  .ajustes-cabecera {
+    font-family: var(--fuente-titulo);
+    font-size: 28px;
+    letter-spacing: 0.12em;
+    color: var(--sc-cream);
+    padding: 20px 20px 12px;
+    border-bottom: 3px solid var(--sc-red);
+    border-left: 5px solid var(--sc-red);
+    background: var(--bg-panel);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+
+  /* Cada bloque de ajuste */
+  .ajustes-seccion {
+    margin: 12px 16px 0;
+    padding: 16px;
+    background: var(--bg-panel);
+    border-left: 3px solid var(--sc-red);
+  }
+
+  /* (reservado para uso futuro) */
+  .ajustes-seccion-deshabilitada {
+    opacity: 0.6;
+    border-left-color: var(--sc-grey);
+  }
+
+  .ajustes-seccion-titulo {
+    font-family: var(--fuente-titulo);
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    color: var(--sc-gold);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  /* Fila de ajuste (label + valor/placeholder) */
+  .ajustes-fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--borde-sutil);
+  }
+
+  .ajustes-fila:last-child { border-bottom: none; }
+
+  .ajustes-label {
+    font-family: var(--fuente);
+    font-size: 14px;
+    color: var(--texto-2);
+  }
+
+  .ajustes-pronto {
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    color: var(--texto-4);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: var(--bg-elevado);
+    padding: 3px 8px;
+    border: 1px solid var(--borde-sutil);
+  }
+
+  /* ── Cuenta / usuario ── */
+
+  /* Texto descriptivo cuando no está logueado */
+  .ajustes-texto-cuenta {
+    font-family: var(--fuente);
+    font-size: 13px;
+    color: var(--texto-2);
+    line-height: 1.5;
+    margin: 0 0 14px 0;
+  }
+
+  /* Botón Google */
+  .ajustes-btn-google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: var(--fuente-titulo);
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--sc-black);
+    background: var(--sc-red);
+    border: none;
+    padding: 12px 20px;
+    width: 100%;
+    cursor: pointer;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+    transition: background 0.15s;
+  }
+
+  .ajustes-btn-google:active { background: var(--sc-red-bright); }
+
+  .ajustes-google-icon {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    background: white;
+    color: var(--sc-red);
+    width: 22px;
+    height: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+    font-weight: bold;
+  }
+
+  /* Perfil conectado */
+  .ajustes-perfil-fila {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .ajustes-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 2px solid var(--sc-red);
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .ajustes-perfil-datos {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow: hidden;
+  }
+
+  .ajustes-usuario-nombre {
+    font-family: var(--fuente);
+    font-size: 15px;
+    color: var(--sc-cream);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ajustes-usuario-estado {
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    color: var(--sc-green);
+    letter-spacing: 0.06em;
+  }
+
+  .ajustes-btn-logout {
+    font-family: var(--fuente-titulo);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sc-cream);
+    background: transparent;
+    border: 1px solid var(--sc-red-dark);
+    padding: 8px 16px;
+    width: 100%;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .ajustes-btn-logout:active { background: var(--sc-red-dark); }
+
+  /* ── Toggle switches (audio) ── */
+  .ajustes-toggle {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    background: var(--bg-elevado);
+    border: 1px solid var(--borde-sutil);
+    border-radius: 12px;
+    cursor: not-allowed;
+    padding: 0;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+
+  .ajustes-toggle-off { background: var(--bg-profundo); }
+
+  .ajustes-toggle-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    background: var(--texto-4);
+    border-radius: 50%;
+    transition: transform 0.2s, background 0.2s;
+  }
+
+  /* ── Idiomas ── */
+  .ajustes-idiomas {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+
+  .ajustes-idioma-btn {
+    font-family: var(--fuente-titulo);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--texto-3);
+    background: var(--bg-elevado);
+    border: 1px solid var(--borde-sutil);
+    padding: 8px 14px;
+    cursor: not-allowed;
+    opacity: 0.5;
+    transition: background 0.15s;
+  }
+
+  .ajustes-idioma-activo {
+    color: var(--sc-gold);
+    background: rgba(200, 152, 42, 0.12);
+    border-color: var(--sc-gold);
+    opacity: 1;
+  }
+
+  /* Aviso "próximamente" pequeño bajo cada sección */
+  .ajustes-aviso {
+    font-family: var(--fuente-mono);
+    font-size: 10px;
+    color: var(--texto-4);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 6px 0 0 0;
+  }
+
+  /* Versión al pie */
+  .ajustes-version {
+    margin-top: auto;
+    padding: 24px 20px 8px;
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    color: var(--texto-4);
+    text-align: center;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
 }

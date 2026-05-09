@@ -14,7 +14,8 @@ import { renderizarPresion, renderizarBtnHuelga } from "./render-presion.js";
 export function renderizar() {
   document.getElementById("conciencia-display").textContent =
     formatear(estado.conciencia) + " ⚡";
-  document.getElementById("ingreso-display").textContent =
+  const ingresoDisplay = document.getElementById("ingreso-display");
+  if (ingresoDisplay) ingresoDisplay.textContent =
     formatear(estado.concienciaPorSegundo) + " ⚡ / seg";
 
   // Botones colectivos
