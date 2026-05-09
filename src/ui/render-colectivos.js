@@ -56,7 +56,7 @@ export function renderizarColectivos() {
           <button class="btn-comprar"
             data-accion="comprar" data-arg="${col.id}"
             ${!desbloqueado || estado.conciencia < datos.coste ? "disabled" : ""}>
-            Organizar · ${formatear(datos.coste)} ⚡
+            ${formatear(datos.coste)} ⚡
           </button>
         </div>
       `;
@@ -74,7 +74,7 @@ export function renderizarColectivos() {
           <button class="btn-mejorar"
             data-accion="mejorar" data-arg="${col.id}"
             ${col.nivel >= maxNivel ? "disabled" : ""}>
-            ${col.nivel >= maxNivel ? "Máximo" : "Mejorar · " + formatear(coste) + " ⚡"}
+            ${col.nivel >= maxNivel ? "Máximo" : formatear(coste) + " ⚡"}
           </button>
         </div>
       `;
