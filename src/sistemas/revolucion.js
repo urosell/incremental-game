@@ -66,7 +66,21 @@ export function declararRevolucion(idHeroe) {
 
   // Abrir árbol antes de la nueva run
   renderizarArbol();
-  document.getElementById("panel-arbol").classList.remove("oculto-panel");
+  const panelArbol = document.getElementById("panel-arbol");
+  const esMobile = window.innerWidth <= 1024;
+
+  if (esMobile) {
+    // En mobile: activar el tab del árbol en la secuencia de revolución
+    document.querySelectorAll(".nav-tab").forEach(btn => btn.classList.remove("tab-activo"));
+    document.querySelector('.nav-tab[data-arg="arbol"]')?.classList.add("tab-activo");
+    document.getElementById("panel-izquierdo")?.classList.remove("tab-activo");
+    document.getElementById("panel-mejoras")?.classList.remove("tab-activo");
+    document.getElementById("panel-legado")?.classList.remove("tab-activo");
+    document.getElementById("panel-ajustes")?.classList.remove("tab-activo");
+    panelArbol.classList.add("tab-activo");
+  } else {
+    panelArbol.classList.remove("oculto-panel");
+  }
 }
 
 export function comenzarNuevaRun() {
@@ -79,7 +93,18 @@ export function comenzarNuevaRun() {
   calcularIngreso();
   guardarEstado();
 
-  document.getElementById("panel-arbol").classList.add("oculto-panel");
+  const panelArbol = document.getElementById("panel-arbol");
+  const esMobile = window.innerWidth <= 1024;
+
+  if (esMobile) {
+    // En mobile: cerrar árbol y volver a tab de inicio
+    panelArbol.classList.remove("tab-activo");
+    document.querySelectorAll(".nav-tab").forEach(btn => btn.classList.remove("tab-activo"));
+    document.querySelector('.nav-tab[data-arg="inicio"]')?.classList.add("tab-activo");
+    document.getElementById("panel-izquierdo")?.classList.add("tab-activo");
+  } else {
+    panelArbol.classList.add("oculto-panel");
+  }
 
   const fraseIdx = Math.min(estado.totalRevoluciones - 1, FRASES_REVOLUCION.length - 1);
   mostrarNotificacion(FRASES_REVOLUCION[fraseIdx] + ` (+${_llamasPendientes} 🔥)`);

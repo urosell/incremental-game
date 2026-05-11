@@ -1,0 +1,8 @@
+tipo,nombre,coste,efecto,coste_relativo_colectivo_referencia
+Resistencia,Fondo de Solidaridad,500,Presion -30%,~10x coste Asamblea / 1.25x coste Cooperativa Ali
+Resistencia,Red de Autodefensa,5000,Presion -30% mas,~1.56x coste Biblioteca / 0.2x coste Sindicato
+Resistencia,Contrainformacion,50000,Presion -40% + penalizacion reducida,~1.95x coste Sindicato / 0.24x coste C.Vivienda
+Huelga,Huelga Prolongada,3000,+30s duracion,~0.94x coste Biblioteca
+Huelga,Huelga Salvaje,15000,x2 velocidad reduccion presion,~0.59x coste Sindicato
+Huelga,Movilizacion Rapida,50000,-30s cooldown,~1.95x coste Sindicato
+Huelga,Red Sindical Activa,200000,Auto-activacion a 75% presion,~0.98x coste C.Vivienda

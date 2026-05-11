@@ -28,6 +28,9 @@ export const estado = {
   mejorasHuelga: [],
 
   eventos: [], // reservado
+
+  // Engels — progreso offline
+  ultimoGuardado: 0,
 };
 
 // ─────────────────────────────────────────

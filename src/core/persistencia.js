@@ -14,6 +14,7 @@ const CLAVE_LEGADO   = "conciencia-de-clase-legado-v1";
 // ─────────────────────────────────────────
 export function guardarEstado() {
   try {
+    estado.ultimoGuardado = Date.now();
     localStorage.setItem(CLAVE_GUARDADO, JSON.stringify(estado));
     if (sesion.usuario) {
       guardarPartidaNube(sesion.usuario.uid, estado);
@@ -43,6 +44,8 @@ export function cargarEstado() {
       if (!Array.isArray(estado.mejorasHuelga))   estado.mejorasHuelga = [];
       if (!estado.huelgaExpira)                    estado.huelgaExpira = 0;
       if (!estado.huelgaCooldownHasta)             estado.huelgaCooldownHasta = 0;
+      // Migración Engels
+      if (!estado.ultimoGuardado)                  estado.ultimoGuardado = Date.now();
 
       console.log("✓ Partida cargada");
       return true;

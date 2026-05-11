@@ -30,6 +30,8 @@ import { iniciarBucle } from "./src/bucle.js";
 
 import { activarHuelga, comprarMejoraHuelga } from "./src/sistemas/huelga.js";
 import { comenzarNuevaRun, mostrarHeroes } from "./src/sistemas/revolucion.js";
+import { formatear } from "./src/core/calculos.js";
+import { mostrarNotificacion } from "./src/ui/notificacion.js";
 import {
   comprarNodoArbol,
   abrirArbolConsulta,
@@ -132,9 +134,46 @@ inicializarAuth();
 iniciarBucle();
 
 // ─────────────────────────────────────────
+// PROGRESO OFFLINE — Engels
+// ─────────────────────────────────────────
+function aplicarProgresoOffline() {
+  if (!estado.heroes.includes("engels")) return;
+  if (!estado.ultimoGuardado)            return;
+
+  const EFICIENCIA    = 0.5;
+  const TOPE_SEGUNDOS = 4 * 60 * 60; // 4 horas máximo
+
+  const tiempoFuera = Math.min(
+    (Date.now() - estado.ultimoGuardado) / 1000,
+    TOPE_SEGUNDOS
+  );
+  if (tiempoFuera < 30) return; // menos de 30s: ignorar
+
+  const ganancia = estado.concienciaPorSegundo * tiempoFuera * EFICIENCIA;
+  if (ganancia <= 0) return;
+
+  estado.conciencia      += ganancia;
+  estado.concienciaTotal += ganancia;
+
+  const horas   = Math.floor(tiempoFuera / 3600);
+  const minutos = Math.floor((tiempoFuera % 3600) / 60);
+  const segundos = Math.floor(tiempoFuera % 60);
+  const tiempoStr = horas > 0
+    ? `${horas}h ${minutos}min`
+    : minutos > 0
+      ? `${minutos}min ${segundos}s`
+      : `${segundos}s`;
+
+  mostrarNotificacion(
+    `🏭 Engels ha seguido organizando en tu ausencia (${tiempoStr}). +${formatear(ganancia)} ⚡`
+  );
+}
+
+// ─────────────────────────────────────────
 // PRIMER PINTADO
 // ─────────────────────────────────────────
 calcularIngreso();
+aplicarProgresoOffline();
 renderizar();
 renderizarColectivos();
 renderizarMejorasResistencia();

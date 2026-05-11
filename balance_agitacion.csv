@@ -1,0 +1,22 @@
+nivel,coste,poder_clic,x_coste_vs_anterior,x_poder_vs_anterior,nota
+1,100,2,-,-,Manual: coste fijo
+2,500,4,5x,2x,Manual: coste fijo
+3,2000,8,4x,2x,Manual: coste fijo
+4,8000,16,4x,2x,Manual: coste fijo
+5,30000,32,3.75x,2x,Manual: coste fijo
+6,100000,64,3.33x,2x,Manual: coste fijo
+7,350000,128,3.5x,2x,Manual: coste fijo
+8,1200000,256,3.43x,2x,Manual: coste fijo
+9,4000000,512,3.33x,2x,Manual: coste fijo
+10,12000000,1024,3x,2x,Manual: coste fijo
+11,38400000,2048,3.2x,2x,Auto: prev*3.2
+12,122880000,4096,3.2x,2x,Auto: prev*3.2
+13,393216000,8192,3.2x,2x,Auto: prev*3.2
+14,1258291200,16384,3.2x,2x,Auto: prev*3.2
+15,4026531840,32768,3.2x,2x,Auto: prev*3.2
+16,12884901888,65536,3.2x,2x,Auto: prev*3.2
+17,41223847936,131072,3.2x,2x,Auto: prev*3.2
+18,131916933120,262144,3.2x,2x,Auto: prev*3.2
+19,421733385984,524288,3.2x,2x,Auto: prev*3.2
+20,1349546835148,1048576,3.2x,2x,Auto: prev*3.2
+25,138504823717376,33554432,3.2x,2x,Auto: prev*3.2

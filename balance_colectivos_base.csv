@@ -1,0 +1,11 @@
+id,nombre,coste_compra,ips_nivel1,ratio_coste_ips (seg),x_coste_vs_anterior,x_ips_vs_anterior
+0,Asamblea de Barrio,50,0.5,100,-,-
+1,Cooperativa de Alimentos,400,3,133.3,8x,6x
+2,Biblioteca Popular,3200,22,145.5,8x,7.3x
+3,Sindicato Obrero,25600,170,150.6,8x,7.7x
+4,Colectivo de Vivienda,204800,1300,157.5,8x,7.6x
+5,Radio Comunitaria,1638400,10000,163.8,8x,7.7x
+6,Cooperativa de Energía,13107200,80000,163.8,8x,8x
+7,Universidad Popular,104857600,650000,161.3,8x,8.1x
+8,Red de Comunas,838860800,5200000,161.3,8x,8x
+9,La Internacional,6710886400,42000000,159.8,8x,8.1x

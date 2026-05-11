@@ -69,7 +69,7 @@ export function renderizar() {
   const siguiente = estado.nivelAgitacion < MEJORAS_AGITACION.length
     ? MEJORAS_AGITACION[estado.nivelAgitacion] : null;
   if (siguiente) {
-    const btnAgit = document.querySelector("#mejoras-agitacion .btn-mejora-resistencia");
+    const btnAgit = document.querySelector("button[data-accion='mejorar-agitacion']");
     if (btnAgit) btnAgit.disabled = estado.conciencia < siguiente.coste;
   }
 }
