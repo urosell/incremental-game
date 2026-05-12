@@ -26,6 +26,15 @@ export function formatear(n) {
   return n.toFixed(1);
 }
 
+export function formatearCorto(n) {
+  if (n >= 1_000_000_000_000) return (n / 1_000_000_000_000).toFixed(2) + " T";
+  if (n >= 1_000_000_000)     return (n / 1_000_000_000).toFixed(2) + " B";
+  if (n >= 1_000_000)         return (n / 1_000_000).toFixed(2) + " M";
+  if (n >= 1_000)             return Math.floor(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  if (n < 10)                 return n.toFixed(2);
+  return n.toFixed(1);
+}
+
 // ─────────────────────────────────────────
 // LEGADO — llamas
 // ─────────────────────────────────────────

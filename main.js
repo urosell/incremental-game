@@ -30,6 +30,7 @@ import { iniciarBucle } from "./src/bucle.js";
 
 import { activarHuelga, comprarMejoraHuelga } from "./src/sistemas/huelga.js";
 import { comenzarNuevaRun, mostrarHeroes } from "./src/sistemas/revolucion.js";
+import { inicializarTutorial, iniciarTutorial, handleTutorialAccion } from "./src/sistemas/tutorial.js";
 import { formatear } from "./src/core/calculos.js";
 import { mostrarNotificacion } from "./src/ui/notificacion.js";
 import {
@@ -37,6 +38,7 @@ import {
   abrirArbolConsulta,
   cerrarArbolConsulta,
 } from "./src/sistemas/arbol-legado.js";
+import { cambiarSubtabArbol, renderizarArbol } from "./src/ui/render-arbol.js";
 
 // ─────────────────────────────────────────
 // CARGAR PARTIDA
@@ -71,12 +73,17 @@ const acciones = {
   // Árbol
   "abrir-arbol-consulta":      () => abrirArbolConsulta(),
   "cerrar-arbol-consulta":     () => cerrarArbolConsulta(),
+  "cambiar-subtab-arbol":      (arg) => { cambiarSubtabArbol(arg); renderizarArbol(esModoConsulta()); },
   "comenzar-nueva-run":        () => comenzarNuevaRun(),
   // Auth
   "handle-login":              () => handleLogin(),
   "handle-logout":             () => handleLogout(),
   // Navegación mobile
   "cambiar-tab":               (arg) => cambiarTab(arg),
+  // Tutorial
+  "iniciar-tutorial":          () => iniciarTutorial(),
+  "tut-siguiente":             () => handleTutorialAccion("tut-siguiente"),
+  "tut-saltar":                () => handleTutorialAccion("tut-saltar"),
 };
 
 document.body.addEventListener("click", (e) => {
@@ -85,6 +92,12 @@ document.body.addEventListener("click", (e) => {
   const fn = acciones[el.dataset.accion];
   if (fn) fn(el.dataset.arg);
 });
+
+// Detecta si el árbol está en modo consulta (sin botón "comenzar run")
+function esModoConsulta() {
+  const footer = document.getElementById("panel-arbol-footer");
+  return footer && footer.style.display === "none";
+}
 
 // ─────────────────────────────────────────
 // NAVEGACIÓN MOBILE — cambio de tabs
@@ -132,6 +145,7 @@ function cambiarTab(tab) {
 inicializarBtnAgitar();
 inicializarAuth();
 iniciarBucle();
+inicializarTutorial(cambiarTab);
 
 // ─────────────────────────────────────────
 // PROGRESO OFFLINE — Engels

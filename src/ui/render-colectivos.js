@@ -6,6 +6,7 @@ import { COLECTIVOS } from "../data/colectivos.js";
 import { MAX_NIVEL_COLECTIVO } from "../config/balance.js";
 import {
   formatear,
+  formatearCorto,
   costeMejora,
   obtenerMultiplicador,
   obtenerPenalizacionPresion,
@@ -56,7 +57,7 @@ export function renderizarColectivos() {
           <button class="btn-comprar"
             data-accion="comprar" data-arg="${col.id}"
             ${!desbloqueado || estado.conciencia < datos.coste ? "disabled" : ""}>
-            ${formatear(datos.coste)} ⚡
+            ${formatearCorto(datos.coste)} ⚡
           </button>
         </div>
       `;
@@ -74,7 +75,7 @@ export function renderizarColectivos() {
           <button class="btn-mejorar"
             data-accion="mejorar" data-arg="${col.id}"
             ${col.nivel >= maxNivel ? "disabled" : ""}>
-            ${col.nivel >= maxNivel ? "Máximo" : formatear(coste) + " ⚡"}
+            ${col.nivel >= maxNivel ? "Máximo" : formatearCorto(coste) + " ⚡"}
           </button>
         </div>
       `;

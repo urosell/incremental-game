@@ -4,6 +4,12 @@
 import { legado } from "../core/estado.js";
 import { ARBOL_LEGADO, COLS_PROD, PROD_BONUSES, PROD_COSTES } from "../data/arbol.js";
 
+let _subtabActual = "produccion";
+
+export function cambiarSubtabArbol(seccion) {
+  _subtabActual = seccion;
+}
+
 export function renderizarArbol(consulta = false) {
   const contenedor = document.getElementById("arbol-contenedor");
   if (!contenedor) return;
@@ -14,22 +20,43 @@ export function renderizarArbol(consulta = false) {
   if (btnCerrar)   btnCerrar.style.display  = consulta ? "block" : "none";
   if (btnComenzar) btnComenzar.style.display = consulta ? "none"  : "block";
 
-  contenedor.innerHTML = `
-    ${_renderProduccion(consulta)}
-    ${_renderRamaLineal("agitacion",   "✊ Agitación",   consulta)}
-    ${_renderRamaLineal("resiliencia", "🛡️ Resiliencia", consulta)}
+  const tabs = [
+    { id: "produccion",  label: "🏭 Producción" },
+    { id: "agitacion",   label: "✊ Agitación"  },
+    { id: "resiliencia", label: "🛡️ Resiliencia" },
+  ];
+
+  const tabsHTML = `
+    <div class="arbol-subtabs">
+      ${tabs.map(t => `
+        <button class="arbol-subtab ${_subtabActual === t.id ? "arbol-subtab-activo" : ""}"
+          data-accion="cambiar-subtab-arbol" data-arg="${t.id}">
+          ${t.label}
+        </button>
+      `).join("")}
+    </div>
   `;
+
+  let contenidoHTML = "";
+  if (_subtabActual === "produccion") {
+    contenidoHTML = _renderProduccion(consulta);
+  } else if (_subtabActual === "agitacion") {
+    contenidoHTML = _renderRamaLineal("agitacion", consulta);
+  } else if (_subtabActual === "resiliencia") {
+    contenidoHTML = _renderRamaLineal("resiliencia", consulta);
+  }
+
+  contenedor.innerHTML = tabsHTML + contenidoHTML;
 }
 
 // Rama producción — una card por colectivo con botón progresivo (estilo colectivos)
 function _renderProduccion(consulta) {
   const cards = COLS_PROD.map(col => {
-    // Nivel actual = cuántos nodos de este colectivo están comprados
     const nivelActual = PROD_BONUSES.reduce((total, _, i) =>
       legado.nodos.includes(`prod-${col.id}-${i + 1}`) ? total + 1 : total, 0);
 
     const maxNivel    = PROD_BONUSES.length;
-    const siguiente   = nivelActual < maxNivel ? nivelActual : null; // índice 0-based del siguiente
+    const siguiente   = nivelActual < maxNivel ? nivelActual : null;
     const puedePagar  = siguiente !== null && legado.llamas >= PROD_COSTES[siguiente];
     const idSiguiente = siguiente !== null ? `prod-${col.id}-${siguiente + 1}` : null;
 
@@ -44,7 +71,7 @@ function _renderProduccion(consulta) {
            Nv.${nivelActual + 1} · +${PROD_BONUSES[siguiente] * 100}% · ${PROD_COSTES[siguiente]} 🔥
          </button>`;
 
-    return `<div class="prod-card">
+    return `<div class="prod-card${nivelActual >= maxNivel ? " prod-card-maximo" : ""}">
       <span class="prod-card-emoji">${col.emoji}</span>
       <div class="prod-card-info">
         <div class="prod-card-nombre">${col.nombre}</div>
@@ -54,18 +81,14 @@ function _renderProduccion(consulta) {
     </div>`;
   }).join('');
 
-  return `<div class="arbol-rama arbol-rama-produccion">
-    <div class="arbol-rama-titulo">🏭 Producción</div>
-    ${cards}
-  </div>`;
+  return `<div class="arbol-rama arbol-rama-produccion">${cards}</div>`;
 }
 
 // Ramas lineales (agitación y resiliencia)
-function _renderRamaLineal(ramaId, titulo, consulta) {
+function _renderRamaLineal(ramaId, consulta) {
   const nodos = ARBOL_LEGADO.filter(n => n.rama === ramaId);
   return `
     <div class="arbol-rama">
-      <div class="arbol-rama-titulo">${titulo}</div>
       ${nodos.map((nodo, i) => {
         const comprado   = legado.nodos.includes(nodo.id);
         const desbloq    = !nodo.requiere || legado.nodos.includes(nodo.requiere);

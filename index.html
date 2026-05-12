@@ -136,7 +136,7 @@
   <nav id="nav-mobile">
     <button class="nav-tab tab-activo" data-accion="cambiar-tab" data-arg="inicio">
       <span class="nav-tab-icon">✊</span>
-      <span class="nav-tab-label">Inicio</span>
+      <span class="nav-tab-label">Lucha</span>
     </button>
     <button class="nav-tab" data-accion="cambiar-tab" data-arg="mejoras">
       <span class="nav-tab-icon">⚙️</span>
@@ -251,8 +251,35 @@
       <p class="ajustes-aviso">Más idiomas próximamente</p>
     </div>
 
+    <!-- ── Tutorial ── -->
+    <div class="ajustes-seccion">
+      <div class="ajustes-seccion-titulo">📖 Ayuda</div>
+      <button class="ajustes-btn-tutorial" data-accion="iniciar-tutorial">
+        ★ Ver tutorial del juego
+      </button>
+    </div>
+
     <!-- Versión -->
     <div class="ajustes-version">Class Rising · v0.5.0-alpha</div>
+  </div>
+
+  <!-- TUTORIAL OVERLAY -->
+  <div id="tutorial-overlay" class="oculto">
+    <!-- Caja destacada sobre el elemento señalado -->
+    <div id="tut-highlight"></div>
+    <!-- Tooltip con texto y navegación -->
+    <div id="tut-tooltip">
+      <div id="tut-cabecera">
+        <span id="tut-emoji"></span>
+        <span id="tut-titulo"></span>
+        <span id="tut-contador"></span>
+      </div>
+      <p id="tut-texto"></p>
+      <div class="tut-botones">
+        <button class="tut-btn-saltar" data-accion="tut-saltar">Saltar</button>
+        <button class="tut-btn-siguiente" id="tut-btn-siguiente" data-accion="tut-siguiente">Siguiente →</button>
+      </div>
+    </div>
   </div>
 
   <!-- MODAL EVENTO ALEATORIO (Fase 3) -->

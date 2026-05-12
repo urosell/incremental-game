@@ -2,7 +2,7 @@
 // RENDER — Paneles de Mejoras (Resistencia, Huelga, Agitación)
 // ─────────────────────────────────────────
 import { estado } from "../core/estado.js";
-import { formatear } from "../core/calculos.js";
+import { formatearCorto } from "../core/calculos.js";
 import {
   MEJORAS_RESISTENCIA,
   MEJORAS_HUELGA,
@@ -24,7 +24,7 @@ export function renderizarMejorasResistencia() {
         data-mejora="${mejora.id}"
         data-accion="comprar-mejora-resistencia" data-arg="${mejora.id}"
         ${comprada || estado.conciencia < mejora.coste ? "disabled" : ""}>
-        ${comprada ? "✓ Activa" : formatear(mejora.coste) + " ⚡"}
+        ${comprada ? "✓ Activa" : formatearCorto(mejora.coste) + " ⚡"}
       </button>
     `;
     contenedor.appendChild(div);
@@ -46,7 +46,7 @@ export function renderizarMejorasHuelga() {
         data-huelga="${mejora.id}"
         data-accion="comprar-mejora-huelga" data-arg="${mejora.id}"
         ${comprada || estado.conciencia < mejora.coste ? "disabled" : ""}>
-        ${comprada ? "✓ Activa" : formatear(mejora.coste) + " ⚡"}
+        ${comprada ? "✓ Activa" : formatearCorto(mejora.coste) + " ⚡"}
       </button>
     `;
     contenedor.appendChild(div);
@@ -65,7 +65,7 @@ export function renderizarAgitacion() {
         <button class="btn-agitacion-icono"
           data-accion="mejorar-agitacion"
           ${estado.conciencia < siguiente.coste ? "disabled" : ""}>
-          <span class="btn-agitacion-coste">${formatear(siguiente.coste)} ⚡</span>
+          <span class="btn-agitacion-coste">${formatearCorto(siguiente.coste)} ⚡</span>
           <img src="Imagenes/Mejoras/Fuerza_Agitacion.png" alt="Fuerza de Agitación" draggable="false">
         </button>
       ` : `

@@ -64,12 +64,21 @@ function spawnClickFx(x, y) {
 // ─────────────────────────────────────────
 // AGITAR — clic manual
 // ─────────────────────────────────────────
+function flashConciencia() {
+  const el = document.getElementById("conciencia-display");
+  if (!el) return;
+  el.classList.remove("flash");
+  void el.offsetWidth; // forzar reflow para reiniciar si se pulsa rápido
+  el.classList.add("flash");
+}
+
 function agitar(e) {
   e.stopPropagation();
   const poder = obtenerPoderClic();
   estado.conciencia      += poder;
   estado.concienciaTotal += poder;
   spawnClickFx(e.clientX, e.clientY);
+  flashConciencia();
   renderizar();
   guardarEstado();
   actualizarBotonRevolucion();
