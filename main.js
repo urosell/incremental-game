@@ -140,6 +140,44 @@ function cambiarTab(tab) {
 }
 
 // ─────────────────────────────────────────
+// SWIPE MOBILE — cambio de tabs con deslizamiento
+// ─────────────────────────────────────────
+const TABS_ORDEN = ["inicio", "mejoras", "arbol", "legado", "ajustes"];
+const SWIPE_MIN  = 50;  // px mínimos para considerar swipe
+const SWIPE_MAX_Y = 80; // px máximos en vertical (para no confundir con scroll)
+
+function tabActual() {
+  const activo = document.querySelector(".nav-tab.tab-activo");
+  return activo ? activo.dataset.arg : "inicio";
+}
+
+(function inicializarSwipe() {
+  let startX = 0;
+  let startY = 0;
+
+  document.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener("touchend", (e) => {
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = Math.abs(e.changedTouches[0].clientY - startY);
+
+    if (Math.abs(dx) < SWIPE_MIN || dy > SWIPE_MAX_Y) return;
+
+    const idx = TABS_ORDEN.indexOf(tabActual());
+    if (dx < 0 && idx < TABS_ORDEN.length - 1) {
+      // swipe izquierda → tab siguiente
+      cambiarTab(TABS_ORDEN[idx + 1]);
+    } else if (dx > 0 && idx > 0) {
+      // swipe derecha → tab anterior
+      cambiarTab(TABS_ORDEN[idx - 1]);
+    }
+  }, { passive: true });
+})();
+
+// ─────────────────────────────────────────
 // INICIALIZACIÓN
 // ─────────────────────────────────────────
 inicializarBtnAgitar();
