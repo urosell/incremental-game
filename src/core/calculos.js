@@ -12,6 +12,8 @@ import {
   HUELGA_DURACION_BASE,
   HUELGA_COOLDOWN_BASE,
   HUELGA_REDUCCION_BASE,
+  FACTORES_EXPONENCIAL,
+  FACTORES_COSTE,
 } from "../config/balance.js";
 import { getQteMultiplicador } from "../sistemas/qte.js";
 
@@ -144,12 +146,28 @@ export function obtenerPenalizacionPresion() {
 }
 
 // ─────────────────────────────────────────
-// COSTE DE MEJORA
+// COSTE DE MEJORA (exponencial)
+// datos.coste × (1 + factor)^nivel
+//   Misma lógica que producción: cada nivel cuesta (1+factor) veces el anterior.
 // ─────────────────────────────────────────
 export function costeMejora(colectivo) {
-  const datos = COLECTIVOS[colectivo.id];
+  const datos     = COLECTIVOS[colectivo.id];
+  const factor    = FACTORES_COSTE[colectivo.id] ?? 0.12;
   const descuento = obtenerBonusArbol().descuentoMejoras;
-  return Math.floor(datos.coste * (colectivo.nivel + 1) * 1.5 * (1 - descuento));
+  return Math.floor(datos.coste * Math.pow(1 + factor, colectivo.nivel) * (1 - descuento));
+}
+
+// ─────────────────────────────────────────
+// PRODUCCIÓN EXPONENCIAL POR COLECTIVO
+// base × (1 + factor)^(nivel-1)
+//   Cada nivel añade al anterior su propio valor × factor.
+//   nivel=1 → base · nivel=2 → base×(1+factor) · nivel=3 → base×(1+factor)² · etc.
+// ─────────────────────────────────────────
+export function produccionBase(colId, nivel) {
+  if (nivel <= 0) return 0;
+  const base   = COLECTIVOS[colId].ingresoPorSegundo;
+  const factor = FACTORES_EXPONENCIAL[colId] ?? 0.10;
+  return base * Math.pow(1 + factor, nivel - 1);
 }
 
 // ─────────────────────────────────────────
@@ -166,8 +184,7 @@ export function calcularIngreso() {
 
   estado.concienciaPorSegundo = estado.colectivos.reduce((total, col) => {
     if (col.nivel === 0) return total;
-    const datos = COLECTIVOS[col.id];
-    let produccion = datos.ingresoPorSegundo * col.nivel;
+    let produccion = produccionBase(col.id, col.nivel);
     if (estado.heroes.includes("dolores") && col.id === 3) produccion *= 1.5;
     if (estado.heroes.includes("tesla")   && col.id === 6) produccion *= 2;
     produccion *= getBonusProduccionArbol(col.id);

@@ -13,9 +13,11 @@ import { renderizar, actualizarBotonRevolucion } from "./src/ui/render.js";
 import { abrirModal, cerrarModal, abrirLegado, cerrarLegado } from "./src/ui/modales.js";
 import { renderizarColectivos } from "./src/ui/render-colectivos.js";
 import {
+  renderizarMejoras,
   renderizarMejorasResistencia,
   renderizarMejorasHuelga,
   renderizarAgitacion,
+  cambiarSubtabMejoras,
 } from "./src/ui/render-mejoras.js";
 
 import {
@@ -39,6 +41,7 @@ import {
   cerrarArbolConsulta,
 } from "./src/sistemas/arbol-legado.js";
 import { cambiarSubtabArbol, renderizarArbol } from "./src/ui/render-arbol.js";
+import { inicializarCiudad, detenerCiudad, ocultarInfoPanel, refrescarInfoPanel } from "./src/ui/ciudad.js";
 
 // ─────────────────────────────────────────
 // CARGAR PARTIDA
@@ -46,7 +49,10 @@ import { cambiarSubtabArbol, renderizarArbol } from "./src/ui/render-arbol.js";
 cargarLegado();
 cargarEstado();
 if (!Array.isArray(estado.mejorasResistencia)) estado.mejorasResistencia = [];
-//estado.siguienteEvento = Date.now() + 120000; // primer evento tras 2 min
+// Programar primer evento si no hay uno pendiente (15 min tras arrancar)
+if (!estado.siguienteEvento || estado.siguienteEvento === 0) {
+  estado.siguienteEvento = Date.now() + 15 * 60000;
+}
 
 // ─────────────────────────────────────────
 // LISTENER DELEGADO — un único click handler para todo el HTML
@@ -55,8 +61,8 @@ if (!Array.isArray(estado.mejorasResistencia)) estado.mejorasResistencia = [];
 // ─────────────────────────────────────────
 const acciones = {
   // Colectivos (arg = índice numérico)
-  "comprar":                   (arg) => comprar(Number(arg)),
-  "mejorar":                   (arg) => mejorar(Number(arg)),
+  "comprar":                   (arg) => { comprar(Number(arg)); refrescarInfoPanel(); },
+  "mejorar":                   (arg) => { mejorar(Number(arg)); refrescarInfoPanel(); },
   // Mejoras
   "mejorar-agitacion":         () => mejorarAgitacion(),
   "comprar-mejora-resistencia":(arg) => comprarMejoraResistencia(arg),
@@ -73,8 +79,24 @@ const acciones = {
   // Árbol
   "abrir-arbol-consulta":      () => abrirArbolConsulta(),
   "cerrar-arbol-consulta":     () => cerrarArbolConsulta(),
+  "cerrar-ciudad-info":        () => ocultarInfoPanel(),
   "cambiar-subtab-arbol":      (arg) => { cambiarSubtabArbol(arg); renderizarArbol(esModoConsulta()); },
+  "cambiar-subtab-mejoras":    (arg) => { cambiarSubtabMejoras(arg); renderizarMejoras(); },
   "comenzar-nueva-run":        () => comenzarNuevaRun(),
+  // Reset
+  "resetear-run": () => {
+    if (confirm("¿Resetear la run actual?\nPerderás conciencia, colectivos y mejoras.\nEl legado y los héroes se conservan.")) {
+      localStorage.removeItem("conciencia-de-clase-v1");
+      location.reload();
+    }
+  },
+  "resetear-todo": () => {
+    if (confirm("¿Resetear TODO?\nSe borrarán la run actual Y el legado completo (héroes, árbol, llamas).\nEsta acción no se puede deshacer.")) {
+      localStorage.removeItem("conciencia-de-clase-v1");
+      localStorage.removeItem("conciencia-de-clase-legado-v1");
+      location.reload();
+    }
+  },
   // Auth
   "handle-login":              () => handleLogin(),
   "handle-logout":             () => handleLogout(),
@@ -132,7 +154,28 @@ function cambiarTab(tab) {
     panelLegado.classList.add("oculto-panel");
   }
 
-  // ── 5. Ajustes ──
+  // ── 5. Ciudad ──
+  const panelCiudad = document.getElementById("panel-ciudad");
+  if (panelCiudad) {
+    panelCiudad.classList.toggle("tab-activo", tab === "ciudad");
+    if (tab === "ciudad") {
+      // Mover el header de inicio al slot de ciudad
+      const header = document.querySelector(".inicio-header");
+      const slot   = document.getElementById("ciudad-header-slot");
+      if (header && slot && !slot.contains(header)) slot.appendChild(header);
+      inicializarCiudad();
+    } else {
+      // Devolver el header a panel-izquierdo si estaba en ciudad
+      const header   = document.querySelector(".inicio-header");
+      const panelIzq = document.getElementById("panel-izquierdo");
+      if (header && panelIzq && !panelIzq.contains(header)) {
+        panelIzq.insertBefore(header, panelIzq.firstChild);
+      }
+      detenerCiudad();
+    }
+  }
+
+  // ── 6. Ajustes ──
   const panelAjustes = document.getElementById("panel-ajustes");
   if (panelAjustes) {
     panelAjustes.classList.toggle("tab-activo", tab === "ajustes");
@@ -142,7 +185,7 @@ function cambiarTab(tab) {
 // ─────────────────────────────────────────
 // SWIPE MOBILE — cambio de tabs con deslizamiento
 // ─────────────────────────────────────────
-const TABS_ORDEN = ["inicio", "mejoras", "arbol", "legado", "ajustes"];
+const TABS_ORDEN = ["inicio", "mejoras", "arbol", "ciudad", "legado", "ajustes"];
 const SWIPE_MIN  = 50;  // px mínimos para considerar swipe
 const SWIPE_MAX_Y = 80; // px máximos en vertical (para no confundir con scroll)
 
@@ -228,7 +271,5 @@ calcularIngreso();
 aplicarProgresoOffline();
 renderizar();
 renderizarColectivos();
-renderizarMejorasResistencia();
+renderizarMejoras();
 actualizarBotonRevolucion();
-renderizarAgitacion();
-renderizarMejorasHuelga();

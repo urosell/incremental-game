@@ -9,7 +9,7 @@ import { renderizar, actualizarBotonRevolucion } from "./ui/render.js";
 import { tickPresion } from "./sistemas/presion.js";
 import { activarHuelga } from "./sistemas/huelga.js";
 import { tickQte } from "./sistemas/qte.js";
-// import { verificarEventos } from "./sistemas/eventos.js"; // pendiente de reactivar
+import { verificarEventos } from "./sistemas/eventos.js";
 
 // Cada 50 ticks (5s) se persiste el estado a disco/nube.
 const TICKS_ENTRE_GUARDADOS = 50;
@@ -48,8 +48,8 @@ export function iniciarBucle() {
       }
     }
 
-    // Eventos aleatorios (pendiente de reactivar)
-    // verificarEventos();
+    // Eventos aleatorios
+    verificarEventos();
 
     renderizar();
 

@@ -109,7 +109,8 @@ export function verificarEventos() {
   if (disponibles.length === 0) return;
 
   const evento = disponibles[Math.floor(Math.random() * disponibles.length)];
-  estado.siguienteEvento = Date.now() + 90000 + Math.random() * 90000;
+  // Siguiente evento entre 15 y 60 minutos
+  estado.siguienteEvento = Date.now() + 15 * 60000 + Math.random() * 45 * 60000;
   mostrarEvento(evento);
 }
 

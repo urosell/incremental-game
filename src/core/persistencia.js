@@ -46,6 +46,8 @@ export function cargarEstado() {
       if (!estado.huelgaCooldownHasta)             estado.huelgaCooldownHasta = 0;
       // Migración Engels
       if (!estado.ultimoGuardado)                  estado.ultimoGuardado = Date.now();
+      // Migración trampa revolución
+      if (estado.trampaMostrada === undefined)      estado.trampaMostrada = false;
 
       console.log("✓ Partida cargada");
       return true;

@@ -31,6 +31,9 @@ export const estado = {
 
   // Engels — progreso offline
   ultimoGuardado: 0,
+
+  // Trampa primera revolución
+  trampaMostrada: false,
 };
 
 // ─────────────────────────────────────────

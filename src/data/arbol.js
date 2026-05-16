@@ -16,10 +16,20 @@ export const COLS_PROD = [
   { id: "internacional", nombre: "La Internacional",         emoji: "🌍", colIdx: 9 },
 ];
 
-export const PROD_BONUSES = [0.02, 0.05, 0.10, 0.15, 0.20]; // por nivel
-export const PROD_COSTES  = [1, 2, 4, 7, 12];               // llamas por nivel
+export const PROD_BONUSES = [
+  0.02, 0.05, 0.10, 0.15, 0.20,  // niveles 1-5
+  0.25, 0.35, 0.50, 0.65, 0.80,  // niveles 6-10
+  1.00, 1.25, 1.50, 2.00, 2.50,  // niveles 11-15
+  3.00, 4.00, 5.00, 6.50, 8.00,  // niveles 16-20
+];
+export const PROD_COSTES = [
+  1,   2,   4,   7,   12,   // niveles 1-5
+  18,  26,  38,  55,  80,   // niveles 6-10
+  115, 165, 235, 335, 480,  // niveles 11-15
+  680, 950, 1350, 1900, 2700, // niveles 16-20
+];
 
-// Generar nodos de producción: 10 colectivos × 5 niveles
+// Generar nodos de producción: 10 colectivos × 20 niveles
 const nodosProduccion = COLS_PROD.flatMap(col =>
   PROD_BONUSES.map((bonus, i) => ({
     id:       `prod-${col.id}-${i + 1}`,

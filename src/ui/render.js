@@ -4,7 +4,7 @@
 import { estado } from "../core/estado.js";
 import { COLECTIVOS } from "../data/colectivos.js";
 import { MEJORAS_RESISTENCIA, MEJORAS_HUELGA, MEJORAS_AGITACION } from "../data/mejoras.js";
-import { UMBRAL_REVOLUCION, MAX_NIVEL_COLECTIVO } from "../config/balance.js";
+import { UMBRAL_REVOLUCION, UMBRAL_TRAMPA, MAX_NIVEL_COLECTIVO } from "../config/balance.js";
 import { formatear, costeMejora, obtenerPoderClic } from "../core/calculos.js";
 import { renderizarPresion, renderizarBtnHuelga } from "./render-presion.js";
 
@@ -34,11 +34,15 @@ export function renderizar() {
   });
 
   // Barra de progreso revolución
-  const porcentaje = Math.min(100, (estado.concienciaTotal / UMBRAL_REVOLUCION) * 100);
+  // En la primera run, antes de revelar la trampa, mostramos el umbral falso
+  const umbralVisible = (estado.totalRevoluciones === 0 && !estado.trampaMostrada)
+    ? UMBRAL_TRAMPA
+    : UMBRAL_REVOLUCION;
+  const porcentaje = Math.min(100, (estado.concienciaTotal / umbralVisible) * 100);
   const barra      = document.getElementById("progreso-barra");
   const texto      = document.getElementById("progreso-texto");
   if (barra) barra.style.width = porcentaje + "%";
-  if (texto) texto.textContent = formatear(estado.concienciaTotal) + " / " + formatear(UMBRAL_REVOLUCION) + " ⚡";
+  if (texto) texto.textContent = formatear(estado.concienciaTotal) + " / " + formatear(umbralVisible) + " ⚡";
 
   // Info de agitación — poder real con todos los multiplicadores aplicados
   const agitarInfo = document.getElementById("agitar-info");
@@ -92,7 +96,10 @@ export function actualizarEfectoDisplay() {
 export function actualizarBotonRevolucion() {
   const btn = document.getElementById("btn-revolucion");
   if (!btn) return;
-  if (estado.concienciaTotal >= UMBRAL_REVOLUCION) {
+  const umbralVisible = (estado.totalRevoluciones === 0 && !estado.trampaMostrada)
+    ? UMBRAL_TRAMPA
+    : UMBRAL_REVOLUCION;
+  if (estado.concienciaTotal >= umbralVisible) {
     btn.classList.remove("oculto");
   }
 }

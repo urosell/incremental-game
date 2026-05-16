@@ -11,6 +11,7 @@ import {
   obtenerMultiplicador,
   obtenerPenalizacionPresion,
   getBonusProduccionArbol,
+  produccionBase,
 } from "../core/calculos.js";
 
 export function renderizarColectivos() {
@@ -29,7 +30,8 @@ export function renderizarColectivos() {
     card.className = "colectivo-card" + (desbloqueado ? "" : " bloqueado");
 
     const produccionActual = (() => {
-      let p = datos.ingresoPorSegundo * Math.max(col.nivel, 1);
+      // Mostrar producción al nivel actual (o nivel 1 si aún no organizado)
+      let p = produccionBase(col.id, Math.max(col.nivel, 1));
       if (estado.heroes.includes("dolores") && col.id === 3) p *= 1.5;
       if (estado.heroes.includes("tesla")   && col.id === 6) p *= 2;
       p *= obtenerMultiplicador();
@@ -74,7 +76,7 @@ export function renderizarColectivos() {
           <div class="produccion-texto">${produccionActual}</div>
           <button class="btn-mejorar"
             data-accion="mejorar" data-arg="${col.id}"
-            ${col.nivel >= maxNivel ? "disabled" : ""}>
+            ${col.nivel >= maxNivel || estado.conciencia < coste ? "disabled" : ""}>
             ${col.nivel >= maxNivel ? "Máximo" : formatearCorto(coste) + " ⚡"}
           </button>
         </div>

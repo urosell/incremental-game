@@ -45,7 +45,7 @@ export function declararRevolucion(idHeroe) {
   _llamasPendientes = calcularLlamas(estado.concienciaTotal);
   legado.llamas += _llamasPendientes;
 
-  estado.heroes.push(idHeroe);
+  if (idHeroe) estado.heroes.push(idHeroe);
   estado.totalRevoluciones++;
 
   // Reset completo — los bonuses de inicio se aplican en comenzarNuevaRun
@@ -121,13 +121,36 @@ export function comenzarNuevaRun() {
 // ─────────────────────────────────────────
 export function mostrarHeroes() {
   cerrarModal("modal-revolucion");
+
+  // ── TRAMPA: primera run, aún no revelada ──
+  if (estado.totalRevoluciones === 0 && !estado.trampaMostrada) {
+    estado.trampaMostrada = true;
+    guardarEstado();
+    // Ocultar el botón de revolución hasta que se alcance el umbral real
+    document.getElementById("btn-revolucion")?.classList.add("oculto");
+    abrirModal("modal-trampa");
+    // Actualizar barra para que muestre ya el umbral real
+    renderizar();
+    actualizarBotonRevolucion();
+    return;
+  }
+
   const heroes = heroesAleatorios();
   const lista  = document.getElementById("lista-heroes-seleccion");
   lista.innerHTML = "";
 
   if (heroes.length === 0) {
-    lista.innerHTML = "<p style='color:#888'>Ya tienes todos los héroes.</p>";
+    lista.innerHTML = `
+      <p style="color:var(--texto-2);text-align:center;margin-bottom:16px">
+        Ya tienes todos los héroes desbloqueados.
+      </p>
+      <button class="btn-heroe-continuar" id="btn-continuar-sin-heroe">
+        Gastar llamas revolucionarias →
+      </button>
+    `;
     abrirModal("modal-heroes");
+    document.getElementById("btn-continuar-sin-heroe")
+      ?.addEventListener("click", () => declararRevolucion(null));
     return;
   }
 

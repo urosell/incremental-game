@@ -93,13 +93,7 @@
 
     <!-- PANEL MEJORAS — Fijo derecha -->
     <div id="panel-mejoras">
-      <div class="seccion-titulo">⚙️ Mejoras</div>
-      <div class="seccion-titulo" style="margin-top:16px">🛡️ Resistencia al Capital</div>
-      <div id="mejoras-resistencia"></div>
-      <div class="seccion-titulo" style="margin-top:20px">✊ Fuerza de Agitación</div>
-      <div id="mejoras-agitacion"></div>
-      <div class="seccion-titulo" style="margin-top:20px">🪧 Acción Directa</div>
-      <div id="mejoras-huelga"></div>
+      <div id="mejoras-contenedor"></div>
     </div>
 
   </div>
@@ -118,6 +112,15 @@
     <div id="panel-arbol-footer">
       <button id="btn-comenzar-run" data-accion="comenzar-nueva-run">▶ Comenzar nueva partida</button>
     </div>
+  </div>
+
+  <!-- PANEL CIUDAD ISOMÉTRICA -->
+  <div id="panel-ciudad">
+    <div id="ciudad-header-slot"></div>
+    <div id="ciudad-canvas-container">
+      <canvas id="ciudad-canvas"></canvas>
+    </div>
+    <div id="ciudad-info-panel" class="oculto"></div>
   </div>
 
   <!-- NOTIFICACION NARRATIVA -->
@@ -146,6 +149,10 @@
       <span class="nav-tab-icon">🔥</span>
       <span class="nav-tab-label">Árbol</span>
     </button>
+    <button class="nav-tab" data-accion="cambiar-tab" data-arg="ciudad">
+      <span class="nav-tab-icon">🏘️</span>
+      <span class="nav-tab-label">Ciudad</span>
+    </button>
     <button class="nav-tab" data-accion="cambiar-tab" data-arg="legado">
       <span class="nav-tab-icon">📜</span>
       <span class="nav-tab-label">Legado</span>
@@ -158,6 +165,26 @@
 
   <script type="module" src="firebase.js"></script>
   <script type="module" src="main.js"></script>
+
+  <!-- MODAL TRAMPA — primera revolución -->
+  <div id="modal-trampa" class="modal oculto">
+    <div class="modal-contenido modal-trampa-contenido">
+      <div class="modal-trampa-emoji">✊</div>
+      <h2 class="modal-trampa-titulo">¿Tan fácil pensabas que sería?</h2>
+      <p class="modal-trampa-texto">
+        La revolución no se declara con <strong>10.000</strong> almas despiertas.<br>
+        El poder no cede ante gestos simbólicos.
+      </p>
+      <p class="modal-trampa-umbral">
+        El coste real de la Revolución son<br>
+        <span class="modal-trampa-numero">50.000.000.000 ⚡</span>
+      </p>
+      <p class="modal-trampa-subtexto">Organiza. Resiste. Vuelve cuando el pueblo esté listo.</p>
+      <button class="btn-confirmar" data-accion="cerrar-modal" data-arg="modal-trampa">
+        Seguir luchando →
+      </button>
+    </div>
+  </div>
 
   <!-- MODAL REVOLUCIÓN -->
   <div id="modal-revolucion" class="modal oculto">
@@ -257,6 +284,25 @@
       <button class="ajustes-btn-tutorial" data-accion="iniciar-tutorial">
         ★ Ver tutorial del juego
       </button>
+    </div>
+
+    <!-- ── Datos ── -->
+    <div class="ajustes-seccion">
+      <div class="ajustes-seccion-titulo">🗑️ Datos</div>
+      <div class="ajustes-fila-reset">
+        <div class="ajustes-reset-info">
+          <span class="ajustes-label">Run actual</span>
+          <span class="ajustes-aviso-inline">Borra conciencia, colectivos y mejoras. El legado se conserva.</span>
+        </div>
+        <button class="ajustes-btn-reset" data-accion="resetear-run">Resetear</button>
+      </div>
+      <div class="ajustes-fila-reset">
+        <div class="ajustes-reset-info">
+          <span class="ajustes-label">Todo</span>
+          <span class="ajustes-aviso-inline">Borra también el legado, héroes y árbol revolucionario.</span>
+        </div>
+        <button class="ajustes-btn-reset ajustes-btn-reset-total" data-accion="resetear-todo">Resetear todo</button>
+      </div>
     </div>
 
     <!-- Versión -->
