@@ -3,6 +3,7 @@
 // ─────────────────────────────────────────
 import { estado } from "../core/estado.js";
 import { HEROES } from "../data/heroes.js";
+import { CC } from "./iconos.js";
 
 export function abrirModal(id)  { document.getElementById(id).classList.remove("oculto"); }
 export function cerrarModal(id) { document.getElementById(id).classList.add("oculto"); }
@@ -35,7 +36,7 @@ export function abrirLegado() {
           <div class="legado-heroe-nombre">${h.nombre}</div>
           <div class="legado-heroe-colectivo">📍 ${h.colectivo}</div>
           <div class="legado-heroe-bio">${h.bio}</div>
-          <div class="legado-heroe-bonus">⚡ ${h.descripcion}</div>
+          <div class="legado-heroe-bonus">${CC} ${h.descripcion}</div>
           <div class="legado-heroe-frase">"${h.frase}"</div>
         </div>
       `;

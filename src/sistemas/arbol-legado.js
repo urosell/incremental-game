@@ -5,6 +5,7 @@ import { legado } from "../core/estado.js";
 import { guardarLegado } from "../core/persistencia.js";
 import { ARBOL_LEGADO, TIERS_RESILIENCIA } from "../data/arbol.js";
 import { mostrarNotificacion } from "../ui/notificacion.js";
+import { CC } from "../ui/iconos.js";
 import { renderizarArbol } from "../ui/render-arbol.js";
 import {
   RESILIENCIA_TIER_COSTE_POR_NIVEL,
@@ -92,7 +93,7 @@ export function subirNivelAgitacionClic(seccion) {
   renderizarArbol(true);
 
   const nombres = { mult: "Multiplicador de Clic", inicio: "Inicio con Agitación", heroes: "Héroes Agitan" };
-  mostrarNotificacion(`⚡ ${nombres[seccion]} Nv.${nivelActual + 1} desbloqueado.`);
+  mostrarNotificacion(`${CC} ${nombres[seccion]} Nv.${nivelActual + 1} desbloqueado.`);
 }
 
 // ─────────────────────────────────────────

@@ -935,6 +935,85 @@ body {
   letter-spacing: 0.06em;
 }
 
+/* ── Icono img legacy (tutorial, héroes) ── */
+.icono-cc {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  vertical-align: middle;
+  display: inline-block;
+  margin: 0 1px;
+}
+
+/* ── Icono CSS — dos C apiladas en diagonal ── */
+.cc-icon {
+  display: inline-block;
+  position: relative;
+  width: 1.1em;
+  height: 1.1em;
+  vertical-align: middle;
+  margin: 0 1px;
+}
+.cc-c {
+  position: absolute;
+  font-family: 'Arial Black', Impact, sans-serif;
+  font-weight: 900;
+  line-height: 1;
+  font-size: 80%;
+  letter-spacing: 0;
+  background: linear-gradient(180deg, var(--sc-gold-light) 0%, var(--sc-red-bright) 45%, var(--sc-red-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-text-stroke: 0.06em var(--sc-gold);
+}
+.cc-top { top: 0; left: 0; }
+.cc-bot { top: 27.27%; left: 27.27%; }
+
+#conciencia-display .cc-icon {
+  font-size: 36px;
+}
+#conciencia-display .cc-c {
+  background: none;
+  -webkit-text-fill-color: var(--sc-red-bright);
+  -webkit-text-stroke: 0;
+}
+
+/* X/s — amarillo */
+#ingreso-display .cc-c {
+  background: none;
+  -webkit-text-fill-color: var(--sc-gold-light);
+  -webkit-text-stroke: 0;
+}
+
+/* Panel mejoras — amarillo */
+#panel-mejoras .cc-c {
+  background: none;
+  -webkit-text-fill-color: var(--sc-gold-light);
+  -webkit-text-stroke: 0;
+}
+
+/* Botón organizar (fondo rojo) — blanco */
+.btn-comprar .cc-c {
+  background: none;
+  -webkit-text-fill-color: var(--sc-white);
+  -webkit-text-stroke: 0;
+}
+
+/* Botón mejorar (fondo transparente/dorado) — amarillo */
+.btn-mejorar .cc-c {
+  background: none;
+  -webkit-text-fill-color: var(--sc-gold-light);
+  -webkit-text-stroke: 0;
+}
+
+/* Producción colectivos X CC/s — amarillo */
+.produccion-texto .cc-c {
+  background: none;
+  -webkit-text-fill-color: var(--sc-gold-light);
+  -webkit-text-stroke: 0;
+}
+
 /* ══════════════════════════════════════════
    PRESIÓN CAPITALISTA
    ══════════════════════════════════════════ */

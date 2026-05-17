@@ -2,6 +2,7 @@
 // RENDER — Lista de Colectivos
 // ─────────────────────────────────────────
 import { estado } from "../core/estado.js";
+import { CC } from "./iconos.js";
 import { COLECTIVOS } from "../data/colectivos.js";
 import { MAX_NIVEL_COLECTIVO } from "../config/balance.js";
 import {
@@ -40,7 +41,7 @@ export function renderizarColectivos() {
       if (estado.efectoTemporal?.tipo === "produccion" && estado.efectoTemporal.expira > Date.now()) {
         p *= estado.efectoTemporal.mult;
       }
-      return formatear(p) + " ⚡/s";
+      return formatear(p) + " " + CC + "/s";
     })();
 
     const iconoHTML = datos.imagen
@@ -59,7 +60,7 @@ export function renderizarColectivos() {
           <button class="btn-comprar"
             data-accion="comprar" data-arg="${col.id}"
             ${!desbloqueado || estado.conciencia < datos.coste ? "disabled" : ""}>
-            ${formatearCorto(datos.coste)} ⚡
+            ${formatearCorto(datos.coste)} ${CC}
           </button>
         </div>
       `;
@@ -77,7 +78,7 @@ export function renderizarColectivos() {
           <button class="btn-mejorar"
             data-accion="mejorar" data-arg="${col.id}"
             ${col.nivel >= maxNivel || estado.conciencia < coste ? "disabled" : ""}>
-            ${col.nivel >= maxNivel ? "Máximo" : formatearCorto(coste) + " ⚡"}
+            ${col.nivel >= maxNivel ? "Máximo" : formatearCorto(coste) + " " + CC}
           </button>
         </div>
       `;

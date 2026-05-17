@@ -3,6 +3,7 @@
 // Misma lógica visual que el Árbol Revolucionario
 // ─────────────────────────────────────────
 import { estado } from "../core/estado.js";
+import { CC } from "./iconos.js";
 import { formatearCorto, obtenerDescuentoAgitacionMejora } from "../core/calculos.js";
 import {
   MEJORAS_RESISTENCIA,
@@ -69,7 +70,7 @@ function _cardMejora(mejora, comprada, puedePagar, accion, arg) {
       <button class="btn-nodo-arbol"
         data-accion="${accion}" data-arg="${arg}"
         ${!puedePagar ? "disabled" : ""}>
-        ${formatearCorto(mejora.coste)} ⚡
+        ${formatearCorto(mejora.coste)} ${CC}
       </button>
     `;
   }
@@ -84,7 +85,7 @@ function _cardMejora(mejora, comprada, puedePagar, accion, arg) {
         </div>
         ${comprada
           ? `<div class="res-tier-nivel" style="color:var(--sc-green)">✓</div>`
-          : `<div class="res-tier-nivel">${formatearCorto(mejora.coste)} ⚡</div>`}
+          : `<div class="res-tier-nivel">${formatearCorto(mejora.coste)} ${CC}</div>`}
       </div>
       <div class="res-tier-accion">${accionHTML}</div>
     </div>
@@ -124,19 +125,19 @@ function _renderAgitacion() {
 
   let accionHTML;
   if (!siguiente) {
-    accionHTML = `<div class="arbol-nodo-activo">✓ Máximo — ${formatearCorto(actual.poderClic)} ⚡/clic</div>`;
+    accionHTML = `<div class="arbol-nodo-activo">✓ Máximo — ${formatearCorto(actual.poderClic)} ${CC}/clic</div>`;
   } else {
     const descuento  = obtenerDescuentoAgitacionMejora();
     const costeReal  = Math.floor(siguiente.coste * (1 - descuento));
     const hayDesc    = descuento > 0;
     const costeHTML  = hayDesc
-      ? `<s>${formatearCorto(siguiente.coste)}</s> ${formatearCorto(costeReal)} ⚡`
-      : `${formatearCorto(costeReal)} ⚡`;
+      ? `<s>${formatearCorto(siguiente.coste)}</s> ${formatearCorto(costeReal)} ${CC}`
+      : `${formatearCorto(costeReal)} ${CC}`;
 
     accionHTML = `
       <div class="res-tier-preview">
-        Ahora: <strong>${actual ? formatearCorto(actual.poderClic) : 1} ⚡/clic</strong>
-        → Nv.${nivel + 1}: <strong>${formatearCorto(siguiente.poderClic)} ⚡/clic</strong>
+        Ahora: <strong>${actual ? formatearCorto(actual.poderClic) : 1} ${CC}/clic</strong>
+        → Nv.${nivel + 1}: <strong>${formatearCorto(siguiente.poderClic)} ${CC}/clic</strong>
       </div>
       <button class="btn-nodo-arbol"
         data-accion="mejorar-agitacion"
@@ -155,7 +156,7 @@ function _renderAgitacion() {
       ${LINK}
       <div class="res-tier-card${!siguiente ? " res-tier-max" : ""}">
         <div class="res-tier-header">
-          <span class="res-tier-emoji">⚡</span>
+          <span class="res-tier-emoji">${CC}</span>
           <div class="res-tier-info">
             <div class="res-tier-nombre">Fuerza de Agitación</div>
             <div class="res-tier-desc">Aumenta el poder de clic manual</div>

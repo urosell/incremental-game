@@ -48,7 +48,7 @@ function spawnClickFx(x, y) {
       _agitarIdx++;
       el.appendChild(img);
     } else {
-      el.textContent = "⚡";
+      el.innerHTML = `<img src="Imagenes/Conciencia_Clase.png" class="icono-cc" alt="⚡">`;
     }
 
     // Dispersión aleatoria proporcional a la cantidad

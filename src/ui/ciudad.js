@@ -5,6 +5,7 @@ import { estado } from "../core/estado.js";
 import { COLECTIVOS } from "../data/colectivos.js";
 import { formatear, formatearCorto, costeMejora, obtenerDescuentoMejoras, obtenerBonusArbol, produccionBase } from "../core/calculos.js";
 import { MAX_NIVEL_COLECTIVO } from "../config/balance.js";
+import { CC } from "./iconos.js";
 
 // ── Constantes ─────────────────────────────
 const TW = 100;   // ancho del diamante del tile
@@ -515,7 +516,7 @@ export function mostrarInfoPanel(parcela) {
     const costeReal = Math.floor(datos.coste * (1 - descuento));
     botonHTML = `<button class="ciudad-btn" data-accion="comprar" data-arg="${colId}"
       ${estado.conciencia < costeReal ? 'disabled' : ''}>
-      Organizar · ${formatearCorto(costeReal)} ⚡
+      Organizar · ${formatearCorto(costeReal)} ${CC}
     </button>`;
   } else if (nivel >= MAX_NIVEL_COLECTIVO) {
     botonHTML = `<button class="ciudad-btn ciudad-btn-max" disabled>✓ Nivel Máximo</button>`;
@@ -523,7 +524,7 @@ export function mostrarInfoPanel(parcela) {
     const coste = costeMejora(col);
     botonHTML = `<button class="ciudad-btn" data-accion="mejorar" data-arg="${colId}"
       ${estado.conciencia < coste ? 'disabled' : ''}>
-      Mejorar · ${formatearCorto(coste)} ⚡
+      Mejorar · ${formatearCorto(coste)} ${CC}
     </button>`;
   }
 
@@ -536,7 +537,7 @@ export function mostrarInfoPanel(parcela) {
       </div>
       <button class="ciudad-info-cerrar" data-accion="cerrar-ciudad-info">✕</button>
     </div>
-    ${nivel > 0 ? `<div class="ciudad-info-prod">${formatear(produccionBase(colId, nivel))} ⚡/s</div>` : `<div class="ciudad-info-prod ciudad-info-inactivo">Sin organizar</div>`}
+    ${nivel > 0 ? `<div class="ciudad-info-prod">${formatear(produccionBase(colId, nivel))} ${CC}/s</div>` : `<div class="ciudad-info-prod ciudad-info-inactivo">Sin organizar</div>`}
     ${botonHTML}
   `;
 

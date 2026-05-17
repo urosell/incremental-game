@@ -32,7 +32,7 @@ const PASOS = [
     id: "agitar",
     emoji: "✊",
     titulo: "¡Agitar!",
-    texto: "Pulsa este botón para generar ⚡ manualmente. Al principio es tu única fuente. Cuanto más mejores la Fuerza de Agitación, más genera cada clic.",
+    texto: "Pulsa este botón para generar <img src='Imagenes/Conciencia_Clase.png' class='icono-cc' alt='⚡'> manualmente. Al principio es tu única fuente. Cuanto más mejores la Fuerza de Agitación, más genera cada clic.",
     target: ".inicio-agitar-bloque",
     tab: "inicio",
     flecha: "arriba",
@@ -41,7 +41,7 @@ const PASOS = [
     id: "colectivos",
     emoji: "🏘️",
     titulo: "Colectivos",
-    texto: "Los colectivos generan ⚡ automáticamente, segundo a segundo. Organiza el primero y el movimiento nunca para. Mejóralos para multiplicar su producción.",
+    texto: "Los colectivos generan <img src='Imagenes/Conciencia_Clase.png' class='icono-cc' alt='⚡'> automáticamente, segundo a segundo. Organiza el primero y el movimiento nunca para. Mejóralos para multiplicar su producción.",
     target: "#lista-colectivos-movil",
     tab: "inicio",
     flecha: "arriba",
@@ -95,7 +95,7 @@ const PASOS = [
     id: "heroe",
     emoji: "🌟",
     titulo: "Elige un Héroe",
-    texto: "Al declarar la Revolución, eliges un Héroe histórico. Cada uno tiene un bonus permanente único — Rosa Luxemburg dobla la producción, Freire dobla el clic, Allende arranca con 500⚡... Elige con estrategia.",
+    texto: "Al declarar la Revolución, eliges un Héroe histórico. Cada uno tiene un bonus permanente único — Rosa Luxemburg dobla la producción, Freire dobla el clic, Allende arranca con 500 <img src='Imagenes/Conciencia_Clase.png' class='icono-cc' alt='⚡'>... Elige con estrategia.",
     target: null,
     tab: "inicio",
   },
@@ -175,7 +175,7 @@ function mostrarPaso(idx) {
   // Actualizar texto del tooltip
   document.getElementById("tut-emoji").textContent  = paso.emoji || "★";
   document.getElementById("tut-titulo").textContent = paso.titulo;
-  document.getElementById("tut-texto").textContent  = paso.texto;
+  document.getElementById("tut-texto").innerHTML    = paso.texto;
   document.getElementById("tut-contador").textContent =
     `${idx + 1} / ${PASOS.length}`;
 

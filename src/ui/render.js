@@ -5,18 +5,19 @@ import { estado } from "../core/estado.js";
 import { COLECTIVOS } from "../data/colectivos.js";
 import { MEJORAS_RESISTENCIA, MEJORAS_HUELGA, MEJORAS_AGITACION } from "../data/mejoras.js";
 import { UMBRAL_REVOLUCION, UMBRAL_TRAMPA, MAX_NIVEL_COLECTIVO } from "../config/balance.js";
-import { formatear, costeMejora, obtenerPoderClic } from "../core/calculos.js";
+import { formatear, formatearCompleto, costeMejora, obtenerPoderClic } from "../core/calculos.js";
+import { CC } from "./iconos.js";
 import { renderizarPresion, renderizarBtnHuelga } from "./render-presion.js";
 
 // Refresco "ligero": ajusta números y disabled de los botones que ya están en el DOM.
 // Para reconstruir el DOM (tras una compra que cambia nivel) se llaman los renderizar*
 // específicos desde quien hizo la acción.
 export function renderizar() {
-  document.getElementById("conciencia-display").textContent =
-    formatear(estado.conciencia) + " ⚡";
+  document.getElementById("conciencia-display").innerHTML =
+    formatearCompleto(estado.conciencia) + " " + CC;
   const ingresoDisplay = document.getElementById("ingreso-display");
-  if (ingresoDisplay) ingresoDisplay.textContent =
-    formatear(estado.concienciaPorSegundo) + " ⚡/s";
+  if (ingresoDisplay) ingresoDisplay.innerHTML =
+    formatear(estado.concienciaPorSegundo) + " " + CC + "/s";
 
   // Botones colectivos
   estado.colectivos.forEach(col => {
@@ -42,11 +43,11 @@ export function renderizar() {
   const barra      = document.getElementById("progreso-barra");
   const texto      = document.getElementById("progreso-texto");
   if (barra) barra.style.width = porcentaje + "%";
-  if (texto) texto.textContent = formatear(estado.concienciaTotal) + " / " + formatear(umbralVisible) + " ⚡";
+  if (texto) texto.innerHTML = formatear(estado.concienciaTotal) + " / " + formatear(umbralVisible) + " " + CC;
 
   // Info de agitación — poder real con todos los multiplicadores aplicados
   const agitarInfo = document.getElementById("agitar-info");
-  if (agitarInfo) agitarInfo.textContent = `+${formatear(obtenerPoderClic())} ⚡ por clic`;
+  if (agitarInfo) agitarInfo.innerHTML = `+${formatear(obtenerPoderClic())} ${CC} por clic`;
 
   // Fase 3
   renderizarPresion();

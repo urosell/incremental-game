@@ -33,7 +33,7 @@ export const HEROES = [
   {
     id: "engels", nombre: "Friedrich Engels", emoji: "🏭",
     colectivo: "Colectivo de Vivienda",
-    descripcion: "Genera ⚡ pasiva con el juego cerrado.",
+    descripcion: `Genera <img src='Imagenes/Conciencia_Clase.png' class='icono-cc' alt='⚡'> pasiva con el juego cerrado.`,
     frase: "Una onza de acción vale más que una tonelada de teoría.",
     bio: "Filósofo y teórico político alemán (1820–1895). Coautor del Manifiesto Comunista junto a Karl Marx. Fue el primero en analizar la relación entre industrialización y pobreza obrera en su obra 'La situación de la clase obrera en Inglaterra', escrita a los 24 años.",
   },
@@ -68,7 +68,7 @@ export const HEROES = [
   {
     id: "allende", nombre: "Salvador Allende", emoji: "🌟",
     colectivo: "La Internacional",
-    descripcion: "Empiezas cada Revolución con 500 ⚡ ya acumulados.",
+    descripcion: `Empiezas cada Revolución con 500 <img src='Imagenes/Conciencia_Clase.png' class='icono-cc' alt='⚡'> ya acumulados.`,
     frase: "Tienen la fuerza, pero no tienen la razón.",
     bio: "Médico y político chileno (1908–1973). Primer presidente socialista elegido democráticamente en América Latina. Impulsó la nacionalización del cobre y reformas sociales profundas. Murió durante el golpe de Estado de Pinochet apoyado por la CIA el 11 de septiembre de 1973.",
   },

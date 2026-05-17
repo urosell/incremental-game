@@ -6,6 +6,7 @@ import { formatear, calcularIngreso } from "../core/calculos.js";
 import { guardarEstado } from "../core/persistencia.js";
 import { mostrarNotificacion } from "../ui/notificacion.js";
 import { abrirModal, cerrarModal } from "../ui/modales.js";
+import { CC } from "../ui/iconos.js";
 import { renderizar } from "../ui/render.js";
 
 // ─────────────────────────────────────────
@@ -126,8 +127,8 @@ function mostrarEvento(evento) {
     const bonusAceptar  = Math.floor(estado.conciencia * 0.50);
     const costoRechazar = Math.floor(estado.conciencia * 0.10);
     situacionEl.innerHTML = `
-      <div class="evento-opcion"><strong>Aceptar:</strong> +<em>${formatear(bonusAceptar)} ⚡</em> pero Presión Capitalista +25.</div>
-      <div class="evento-opcion"><strong>Rechazar:</strong> −<em>${formatear(costoRechazar)} ⚡</em> pero Presión Capitalista −15.</div>
+      <div class="evento-opcion"><strong>Aceptar:</strong> +<em>${formatear(bonusAceptar)} ${CC}</em> pero Presión Capitalista +25.</div>
+      <div class="evento-opcion"><strong>Rechazar:</strong> −<em>${formatear(costoRechazar)} ${CC}</em> pero Presión Capitalista −15.</div>
     `;
     const btnA = document.createElement("button");
     btnA.className = "btn-confirmar";

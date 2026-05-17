@@ -2,6 +2,7 @@
 // RENDER — Árbol Revolucionario
 // ─────────────────────────────────────────
 import { legado } from "../core/estado.js";
+import { CC } from "./iconos.js";
 import { ARBOL_LEGADO, COLS_PROD, PROD_BONUSES, PROD_COSTES, TIERS_RESILIENCIA } from "../data/arbol.js";
 import {
   RESILIENCIA_TIER_COSTE_POR_NIVEL, RESILIENCIA_TIER_MAX_NIVEL,
@@ -145,7 +146,7 @@ function _renderArbolAgitacion(consulta) {
   const SECCIONES = [
     {
       id: "mult",
-      emoji: "⚡",
+      emoji: "${CC}",
       nombre: "Multiplicador de Clic",
       desc: "Aumenta el poder de clic",
       efectoNivel: (n) => `×${(1 + n * AGITACION_CLIC_PCT_POR_NIVEL).toFixed(1)} poder de clic`,
@@ -166,8 +167,8 @@ function _renderArbolAgitacion(consulta) {
       emoji: "🦸",
       nombre: "Héroes Agitan",
       desc: "Cada héroe añade poder de clic extra",
-      efectoNivel: (n) => n > 0 ? `+${n * AGITACION_CLIC_HEROES_POR_NIV}⚡ por héroe` : "Sin efecto aún",
-      efectoSig:   (n) => `+${(n + 1) * AGITACION_CLIC_HEROES_POR_NIV}⚡ por héroe`,
+      efectoNivel: (n) => n > 0 ? `+${n * AGITACION_CLIC_HEROES_POR_NIV}${CC} por héroe` : "Sin efecto aún",
+      efectoSig:   (n) => `+${(n + 1) * AGITACION_CLIC_HEROES_POR_NIV}${CC} por héroe`,
       requiere: "inicio",
     },
   ];
@@ -269,7 +270,7 @@ function _renderArbolAgitacion(consulta) {
       <div class="arbol-fork-cols">
         <div class="arbol-fork-col">
           ${LINK}
-          <div class="arbol-subtitulo-rama">⚡ Poder de Clic</div>
+          <div class="arbol-subtitulo-rama">${CC} Poder de Clic</div>
           ${LINK}
           ${ramaClicHTML}
         </div>
@@ -407,7 +408,7 @@ function _renderArbolLlamas(consulta) {
         </div>
         <div class="arbol-fork-col">
           ${LINK}
-          <div class="arbol-subtitulo-rama">⚡ Eficiencia</div>
+          <div class="arbol-subtitulo-rama">${CC} Eficiencia</div>
           ${LINK}
           ${cadenaHTML(eff)}
         </div>

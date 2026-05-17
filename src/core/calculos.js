@@ -32,6 +32,11 @@ export function formatear(n) {
   return n.toFixed(1);
 }
 
+// Siempre número entero con separadores de miles — para el display principal
+export function formatearCompleto(n) {
+  return Math.floor(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
 export function formatearCorto(n) {
   if (n >= 1_000_000_000_000) return (n / 1_000_000_000_000).toFixed(2) + " T";
   if (n >= 1_000_000_000)     return (n / 1_000_000_000).toFixed(2) + " B";
