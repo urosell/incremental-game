@@ -86,8 +86,10 @@ export function declararRevolucion(idHeroe) {
 export function comenzarNuevaRun() {
   // Aplicar bonuses de inicio según nodos comprados
   if (legado.nodos.includes("prod-4")) estado.colectivos[0].nivel = 1;
-  if (legado.nodos.includes("agit-4")) estado.nivelAgitacion = 1;
-  if (legado.nodos.includes("res-4"))  estado.mejorasResistencia = ["fondo-solidaridad", "red-autodefensa", "contrainformacion"];
+  // Sección "inicio" del árbol de agitación: empieza con ese nivel de Agitación
+  const nivelInicio = legado.nivelesAgitacionClic?.inicio ?? 0;
+  if (nivelInicio > 0) estado.nivelAgitacion = nivelInicio;
+  // res-4 eliminado — sustituido por el sistema de tiers de resiliencia
   if (estado.heroes.includes("allende")) estado.conciencia = 500;
 
   calcularIngreso();

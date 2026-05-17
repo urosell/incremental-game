@@ -39,6 +39,9 @@ import {
   comprarNodoArbol,
   abrirArbolConsulta,
   cerrarArbolConsulta,
+  subirNivelResilienciaTier,
+  subirNivelAgitacionCoste,
+  subirNivelAgitacionClic,
 } from "./src/sistemas/arbol-legado.js";
 import { cambiarSubtabArbol, renderizarArbol } from "./src/ui/render-arbol.js";
 import { inicializarCiudad, detenerCiudad, ocultarInfoPanel, refrescarInfoPanel } from "./src/ui/ciudad.js";
@@ -68,6 +71,9 @@ const acciones = {
   "comprar-mejora-resistencia":(arg) => comprarMejoraResistencia(arg),
   "comprar-mejora-huelga":     (arg) => comprarMejoraHuelga(arg),
   "comprar-nodo-arbol":        (arg) => comprarNodoArbol(arg),
+  "subir-nivel-resiliencia-tier":  (arg) => subirNivelResilienciaTier(arg),
+  "subir-nivel-agitacion-coste":   () => subirNivelAgitacionCoste(),
+  "subir-nivel-agitacion-clic":    (arg) => subirNivelAgitacionClic(arg),
   // Huelga
   "activar-huelga":            () => activarHuelga(),
   // Modales (arg = id del modal a abrir/cerrar)

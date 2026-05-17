@@ -7,7 +7,7 @@ export const MAX_NIVEL_COLECTIVO      = 100;      // nivel máximo de cada colec
 export const COOLDOWN_MANIFESTACION   = 60000;    // ms entre manifestaciones
 export const DT                       = 0.1;      // segundos por tick del bucle principal
 
-export const LLAMAS_DIVISOR           = 100;      // calcularLlamas: √(concienciaTotal / LLAMAS_DIVISOR)
+export const LLAMAS_DIVISOR           = 2_000_000_000; // calcularLlamas: concienciaTotal / LLAMAS_DIVISOR (lineal)
 export const PRESION_TASA_BASE        = 0.02;     // presión que sube por tick cuando hay ≥1 colectivo
 export const PRESION_TASA_POR_COL     = 0.015;    // presión adicional por cada colectivo activo
 
@@ -15,6 +15,22 @@ export const HUELGA_DURACION_BASE     = 30;       // segundos que dura la huelga
 export const HUELGA_COOLDOWN_BASE     = 90;       // segundos de cooldown tras la huelga
 export const HUELGA_REDUCCION_BASE    = 2;        // % de presión que reduce por segundo durante la huelga
 export const HUELGA_UMBRAL_AUTO       = 75;       // % de presión que activa la huelga automática
+
+// Árbol — rama resiliencia por tier
+export const RESILIENCIA_TIER_COSTE_POR_NIVEL = 5;    // 🔥 por cada nivel (igual para todos los tiers, ajustar aquí)
+export const RESILIENCIA_TIER_MAX_NIVEL       = 20;   // niveles máximos por elemento de tier
+export const RESILIENCIA_TIER_PCT_POR_NIVEL   = 0.03; // descuento acumulado por nivel (3% → 6% → 9%...)
+
+// Árbol — rama agitación: cadena de coste de mejoras
+export const AGITACION_COSTE_POR_NIVEL  = 5;    // 🔥 por cada nivel
+export const AGITACION_COSTE_MAX_NIVEL  = 10;   // niveles máximos
+export const AGITACION_COSTE_PCT_NIVEL  = 0.10; // −10% coste mejoras por nivel (−10% → −20% → ... → −100%)
+
+// Árbol — rama agitación: poder de clic (3 secciones secuenciales, 5 niveles cada una)
+export const AGITACION_CLIC_COSTE_POR_NIVEL = 5;    // 🔥 por nivel (todas las secciones)
+export const AGITACION_CLIC_MAX_NIVEL       = 5;    // niveles máximos por sección
+export const AGITACION_CLIC_PCT_POR_NIVEL   = 0.50; // +50% poder de clic por nivel (sección mult)
+export const AGITACION_CLIC_HEROES_POR_NIV  = 10;   // +10⚡ por héroe por nivel (sección héroes)
 
 // Factor de PRODUCCIÓN por colectivo (índice 0-9).
 // Fórmula: base × (1 + factor)^(nivel-1)

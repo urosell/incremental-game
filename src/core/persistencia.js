@@ -70,5 +70,15 @@ export function cargarLegado() {
     const datos = localStorage.getItem(CLAVE_LEGADO);
     if (datos) Object.assign(legado, JSON.parse(datos));
     if (!Array.isArray(legado.nodos)) legado.nodos = [];
+    // Migración: árbol de resiliencia por tier
+    if (!legado.nivelesResilienciaTier) {
+      legado.nivelesResilienciaTier = { tier1: 0, tier2: 0, tier3: 0, tier4: 0, all: 0 };
+    }
+    // Migración: árbol de agitación — coste de mejoras
+    if (!legado.nivelAgitacionCoste) legado.nivelAgitacionCoste = 0;
+    // Migración: árbol de agitación — poder de clic
+    if (!legado.nivelesAgitacionClic) {
+      legado.nivelesAgitacionClic = { mult: 0, inicio: 0, heroes: 0 };
+    }
   } catch(e) {}
 }

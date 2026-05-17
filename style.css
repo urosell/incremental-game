@@ -1691,6 +1691,104 @@ body {
 
 .prod-card-accion { flex-shrink: 0; }
 
+/* ── Barra de progreso reutilizable ── */
+.prod-barra-wrap {
+  height: 3px;
+  background: var(--borde);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.prod-barra-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* ── Tier badge en producción ── */
+.prod-tier-badge {
+  font-family: var(--fuente-mono);
+  font-size: 9px;
+  color: var(--sc-gold);
+  border: 1px solid var(--sc-gold);
+  padding: 1px 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 3px;
+  display: inline-block;
+  opacity: 0.75;
+}
+
+/* ── Cards de resiliencia por tier ── */
+.res-tier-card {
+  width: 100%;
+  max-width: 380px;
+  padding: 12px 14px;
+  border: 1px solid var(--borde);
+  border-left: 4px solid var(--sc-gold);
+  background: var(--bg-panel);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.res-tier-card.res-tier-bloqueada {
+  opacity: 0.35;
+  border-left-color: var(--borde);
+}
+
+.res-tier-card.res-tier-max {
+  border-left-color: var(--sc-green);
+  background: var(--bg-verde);
+}
+
+.res-tier-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.res-tier-emoji { font-size: 20px; flex-shrink: 0; }
+
+.res-tier-info { flex: 1; min-width: 0; }
+
+.res-tier-nombre {
+  font-family: var(--fuente-titulo);
+  font-size: 14px;
+  color: var(--texto-claro);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.res-tier-desc {
+  font-family: var(--fuente-mono);
+  font-size: 10px;
+  color: var(--texto-2);
+  margin-top: 2px;
+  letter-spacing: 0.04em;
+}
+
+.res-tier-nivel {
+  font-family: var(--fuente-mono);
+  font-size: 11px;
+  color: var(--sc-gold);
+  flex-shrink: 0;
+}
+
+.res-tier-preview {
+  font-family: var(--fuente-mono);
+  font-size: 10px;
+  color: var(--texto-2);
+  margin-bottom: 4px;
+}
+
+.res-tier-preview strong { color: var(--sc-gold); }
+
+.res-tier-accion {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 /* ── Subtabs del árbol ── */
 .arbol-subtabs {
   display: flex;
@@ -1738,6 +1836,98 @@ body {
   gap: 6px;
 }
 
+/* ── Árbol visual: wrapper principal ── */
+.arbol-tree {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 4px 0 16px;
+}
+
+/* ── Nodo raíz de cada rama ── */
+.arbol-raiz {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--sc-red);
+  color: var(--sc-cream);
+  padding: 8px 20px;
+  font-family: var(--fuente-titulo);
+  font-size: 15px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+}
+
+.arbol-raiz-emoji { font-size: 18px; }
+.arbol-raiz-label { color: var(--sc-cream); }
+
+/* ── Línea conectora vertical ── */
+.arbol-link {
+  width: 2px;
+  height: 22px;
+  background: linear-gradient(to bottom, var(--sc-red), var(--sc-gold));
+  flex-shrink: 0;
+}
+
+/* ── Bifurcación (llamas): línea horizontal con dos ramas ── */
+.arbol-fork {
+  position: relative;
+  width: 60%;
+  height: 20px;
+  display: flex;
+}
+
+.arbol-fork-rama {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  border-top: 2px solid var(--sc-gold);
+}
+
+.arbol-fork-izq {
+  left: 0;
+  border-left: 2px solid var(--sc-gold);
+  border-radius: 4px 0 0 0;
+}
+
+.arbol-fork-der {
+  right: 0;
+  border-right: 2px solid var(--sc-gold);
+  border-radius: 0 4px 0 0;
+}
+
+/* ── Columnas de la bifurcación ── */
+.arbol-fork-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+}
+
+.arbol-fork-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── Subtítulo dentro de una cadena (ej. "Multiplicador") ── */
+.arbol-subtitulo-rama {
+  font-family: var(--fuente-titulo);
+  font-size: 12px;
+  color: var(--sc-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  border: 1px solid var(--sc-gold);
+  padding: 4px 14px;
+  background: rgba(200, 152, 42, 0.07);
+  text-align: center;
+  width: 100%;
+}
+
+/* Mantenemos la clase legacy por si queda alguna referencia */
 .arbol-conector {
   width: 2px;
   height: 18px;
@@ -1747,7 +1937,8 @@ body {
 
 .arbol-nodo {
   width: 100%;
-  padding: 14px;
+  max-width: 320px;
+  padding: 12px 14px;
   border: 1px solid var(--borde);
   border-left: 4px solid var(--borde);
   background: var(--bg-panel);
@@ -1805,6 +1996,8 @@ body {
   font-size: 11px;
   color: var(--texto-off);
 }
+
+/* ── Estilos legacy llamas eliminados — reemplazados por .arbol-fork-cols ── */
 
 .btn-nodo-arbol {
   background: transparent;

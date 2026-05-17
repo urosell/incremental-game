@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────
 import { estado, legado } from "./estado.js";
 import { COLECTIVOS } from "../data/colectivos.js";
-import { COLS_PROD, PROD_BONUSES } from "../data/arbol.js";
+import { COLS_PROD, PROD_BONUSES, TIERS_RESILIENCIA } from "../data/arbol.js";
 import { MEJORAS_AGITACION } from "../data/mejoras.js";
 import {
   LLAMAS_DIVISOR,
@@ -14,6 +14,10 @@ import {
   HUELGA_REDUCCION_BASE,
   FACTORES_EXPONENCIAL,
   FACTORES_COSTE,
+  RESILIENCIA_TIER_PCT_POR_NIVEL,
+  AGITACION_COSTE_PCT_NIVEL,
+  AGITACION_CLIC_PCT_POR_NIVEL,
+  AGITACION_CLIC_HEROES_POR_NIV,
 } from "../config/balance.js";
 import { getQteMultiplicador } from "../sistemas/qte.js";
 
@@ -40,8 +44,31 @@ export function formatearCorto(n) {
 // ─────────────────────────────────────────
 // LEGADO — llamas
 // ─────────────────────────────────────────
+// Multiplicador de llamas según nodos comprados en el árbol
+export function calcularMultiplicadorLlamas() {
+  const n = legado.nodos;
+  let mult = 1;
+  if (n.includes("llamas-mult-1")) mult *= 1.5;
+  if (n.includes("llamas-mult-2")) mult *= 2;
+  if (n.includes("llamas-mult-3")) mult *= 2;
+  if (n.includes("llamas-mult-4")) mult *= 2;
+  return mult;
+}
+
+// Factor de eficiencia: reduce el divisor (más llamas por conciencia)
+export function calcularEficienciaLlamas() {
+  const n = legado.nodos;
+  let factor = 1;
+  if (n.includes("llamas-eff-1")) factor *= 0.75;
+  if (n.includes("llamas-eff-2")) factor *= 0.75;
+  if (n.includes("llamas-eff-3")) factor *= 0.75;
+  return factor;
+}
+
 export function calcularLlamas(concienciaTotal) {
-  return Math.max(1, Math.floor(Math.sqrt(concienciaTotal / LLAMAS_DIVISOR)));
+  const divisor = LLAMAS_DIVISOR * calcularEficienciaLlamas();
+  const base    = Math.max(1, Math.floor(concienciaTotal / divisor));
+  return Math.floor(base * calcularMultiplicadorLlamas());
 }
 
 // ─────────────────────────────────────────
@@ -59,19 +86,31 @@ export function getBonusProduccionArbol(colIdx) {
 }
 
 export function obtenerBonusArbol() {
-  const n = legado.nodos;
-  // multProduccion retirado — ahora es por colectivo vía getBonusProduccionArbol()
+  // multClic: +50% por cada nivel de la sección "mult" del árbol de agitación
+  const nivelMult = legado.nivelesAgitacionClic?.mult ?? 0;
+  const multClic  = 1 + nivelMult * AGITACION_CLIC_PCT_POR_NIVEL;
 
-  let multClic = 1;
-  if (n.includes("agit-1")) multClic *= 1.5;
-  if (n.includes("agit-2")) multClic *= 2;
-  if (n.includes("agit-3")) multClic *= 3;
+  // res-1 a res-4 y agit-1 a agit-5 eliminados — sustituidos por sistemas de niveles
+  return { multClic };
+}
 
-  const descuentoColectivos = n.includes("res-1") ? 0.10 : 0;
-  const descuentoMejoras    = n.includes("res-2") ? 0.15 : 0;
-  const reduccionPresion    = n.includes("res-3") ? 0.25 : 0;
-
-  return { multClic, descuentoColectivos, descuentoMejoras, reduccionPresion };
+// ─────────────────────────────────────────
+// DESCUENTO POR TIER — para compra y mejora de colectivos
+// Aplica el descuento del tier específico del colectivo + el universal
+// ─────────────────────────────────────────
+export function obtenerDescuentoTierColectivo(colIdx) {
+  const niveles = legado.nivelesResilienciaTier;
+  // Descuento del tier específico al que pertenece el colectivo
+  let descuentoTier = 0;
+  for (const tier of TIERS_RESILIENCIA.slice(0, 4)) { // tier1 a tier4
+    if (tier.indices.includes(colIdx)) {
+      descuentoTier = (niveles[tier.id] ?? 0) * RESILIENCIA_TIER_PCT_POR_NIVEL;
+      break;
+    }
+  }
+  // Descuento universal (todos los colectivos)
+  const descuentoAll = (niveles.all ?? 0) * RESILIENCIA_TIER_PCT_POR_NIVEL;
+  return Math.min(0.90, descuentoTier + descuentoAll);
 }
 
 // ─────────────────────────────────────────
@@ -110,7 +149,9 @@ export function obtenerPoderClic() {
   }
   if (estado.heroes.includes("freire")) poder *= 2;
   poder *= obtenerBonusArbol().multClic;
-  if (legado.nodos.includes("agit-5")) poder += estado.heroes.length * 10;
+  // Sección "héroes" del árbol de agitación: +10⚡ por héroe por nivel
+  const nivelHeroes = legado.nivelesAgitacionClic?.heroes ?? 0;
+  if (nivelHeroes > 0) poder += estado.heroes.length * AGITACION_CLIC_HEROES_POR_NIV * nivelHeroes;
   poder *= getQteMultiplicador();
   return poder;
 }
@@ -153,8 +194,13 @@ export function obtenerPenalizacionPresion() {
 export function costeMejora(colectivo) {
   const datos     = COLECTIVOS[colectivo.id];
   const factor    = FACTORES_COSTE[colectivo.id] ?? 0.12;
-  const descuento = obtenerBonusArbol().descuentoMejoras;
+  const descuento = obtenerDescuentoTierColectivo(colectivo.id);
   return Math.floor(datos.coste * Math.pow(1 + factor, colectivo.nivel) * (1 - descuento));
+}
+
+// Descuento sobre el coste de subir nivel de Agitación (tab Mejoras)
+export function obtenerDescuentoAgitacionMejora() {
+  return Math.min(0.90, (legado.nivelAgitacionCoste ?? 0) * AGITACION_COSTE_PCT_NIVEL);
 }
 
 // ─────────────────────────────────────────

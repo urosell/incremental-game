@@ -2,7 +2,7 @@
 // RENDER — Panel de Mejoras con subtabs
 // ─────────────────────────────────────────
 import { estado } from "../core/estado.js";
-import { formatearCorto } from "../core/calculos.js";
+import { formatearCorto, obtenerDescuentoAgitacionMejora } from "../core/calculos.js";
 import {
   MEJORAS_RESISTENCIA,
   MEJORAS_HUELGA,
@@ -75,17 +75,25 @@ function _renderResistencia() {
 
 // ── Agitación ───────────────────────────────
 function _renderAgitacion() {
-  const nivel    = estado.nivelAgitacion;
+  const nivel     = estado.nivelAgitacion;
   const siguiente = nivel < MEJORAS_AGITACION.length ? MEJORAS_AGITACION[nivel] : null;
 
-  const botonHTML = siguiente ? `
-    <button class="btn-agitacion-icono"
-      data-accion="mejorar-agitacion"
-      ${estado.conciencia < siguiente.coste ? "disabled" : ""}>
-      <span class="btn-agitacion-coste">${formatearCorto(siguiente.coste)} ⚡</span>
-      <img src="Imagenes/Mejoras/Fuerza_Agitacion.png" alt="Fuerza de Agitación" draggable="false">
-    </button>
-  ` : `
+  const botonHTML = siguiente ? (() => {
+    const descuento  = obtenerDescuentoAgitacionMejora();
+    const costeReal  = Math.floor(siguiente.coste * (1 - descuento));
+    const hayDesc    = descuento > 0;
+    const costeHTML  = hayDesc
+      ? `<span class="btn-agitacion-coste"><s>${formatearCorto(siguiente.coste)}</s> ${formatearCorto(costeReal)} ⚡</span>`
+      : `<span class="btn-agitacion-coste">${formatearCorto(costeReal)} ⚡</span>`;
+    return `
+      <button class="btn-agitacion-icono"
+        data-accion="mejorar-agitacion"
+        ${estado.conciencia < costeReal ? "disabled" : ""}>
+        ${costeHTML}
+        <img src="Imagenes/Mejoras/Fuerza_Agitacion.png" alt="Fuerza de Agitación" draggable="false">
+      </button>
+    `;
+  })() : `
     <div class="btn-agitacion-icono btn-agitacion-maximo">
       <span class="btn-agitacion-coste">Máximo</span>
       <img src="Imagenes/Mejoras/Fuerza_Agitacion.png" alt="Fuerza de Agitación" draggable="false">

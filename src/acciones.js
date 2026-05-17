@@ -8,8 +8,9 @@ import { MEJORAS_RESISTENCIA, MEJORAS_AGITACION } from "./data/mejoras.js";
 import {
   calcularIngreso,
   costeMejora,
-  obtenerBonusArbol,
   obtenerDescuentoMejoras,
+  obtenerDescuentoTierColectivo,
+  obtenerDescuentoAgitacionMejora,
   obtenerPoderClic,
 } from "./core/calculos.js";
 import { guardarEstado } from "./core/persistencia.js";
@@ -95,7 +96,7 @@ export function inicializarBtnAgitar() {
 export function comprar(id) {
   const col       = estado.colectivos[id];
   const datos     = COLECTIVOS[id];
-  const descuento = Math.min(0.75, obtenerDescuentoMejoras() + obtenerBonusArbol().descuentoColectivos);
+  const descuento = Math.min(0.90, obtenerDescuentoMejoras() + obtenerDescuentoTierColectivo(id));
   const costeReal = Math.floor(datos.coste * (1 - descuento));
   if (estado.conciencia >= costeReal && col.nivel === 0) {
     estado.conciencia -= costeReal;
@@ -126,9 +127,10 @@ export function mejorar(id) {
 // ─────────────────────────────────────────
 export function mejorarAgitacion() {
   if (estado.nivelAgitacion >= MEJORAS_AGITACION.length) return;
-  const siguiente = MEJORAS_AGITACION[estado.nivelAgitacion];
-  if (estado.conciencia < siguiente.coste) return;
-  estado.conciencia -= siguiente.coste;
+  const siguiente  = MEJORAS_AGITACION[estado.nivelAgitacion];
+  const costeReal  = Math.floor(siguiente.coste * (1 - obtenerDescuentoAgitacionMejora()));
+  if (estado.conciencia < costeReal) return;
+  estado.conciencia -= costeReal;
   estado.nivelAgitacion++;
   calcularIngreso();
   renderizar();
