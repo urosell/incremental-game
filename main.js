@@ -130,7 +130,17 @@ function esModoConsulta() {
 // ─────────────────────────────────────────
 // NAVEGACIÓN MOBILE — cambio de tabs
 // ─────────────────────────────────────────
-function cambiarTab(tab) {
+// Mapa tab → id del panel principal que entra en pantalla
+const PANEL_POR_TAB = {
+  inicio:   "panel-izquierdo",
+  ciudad:   "panel-ciudad",
+  mejoras:  "panel-mejoras",
+  arbol:    "panel-arbol",
+  legado:   "panel-legado",
+  ajustes:  "panel-ajustes",
+};
+
+function cambiarTab(tab, dir = null) {
   // ── 1. Marcar tab activo en la barra ──
   document.querySelectorAll(".nav-tab").forEach(btn => btn.classList.remove("tab-activo"));
   document.querySelector(`.nav-tab[data-arg="${tab}"]`)?.classList.add("tab-activo");
@@ -186,12 +196,22 @@ function cambiarTab(tab) {
   if (panelAjustes) {
     panelAjustes.classList.toggle("tab-activo", tab === "ajustes");
   }
+
+  // ── 7. Animación de entrada (solo si viene con dirección de swipe) ──
+  if (dir) {
+    const panelEl = document.getElementById(PANEL_POR_TAB[tab]);
+    if (panelEl) {
+      const cls = dir === "der" ? "tab-slide-derecha" : "tab-slide-izquierda";
+      panelEl.classList.add(cls);
+      panelEl.addEventListener("animationend", () => panelEl.classList.remove(cls), { once: true });
+    }
+  }
 }
 
 // ─────────────────────────────────────────
 // SWIPE MOBILE — cambio de tabs con deslizamiento
 // ─────────────────────────────────────────
-const TABS_ORDEN = ["inicio", "mejoras", "arbol", "ciudad", "legado", "ajustes"];
+const TABS_ORDEN = ["inicio", "ciudad", "mejoras", "arbol", "legado", "ajustes"];
 const SWIPE_MIN  = 50;  // px mínimos para considerar swipe
 const SWIPE_MAX_Y = 80; // px máximos en vertical (para no confundir con scroll)
 
@@ -217,11 +237,11 @@ function tabActual() {
 
     const idx = TABS_ORDEN.indexOf(tabActual());
     if (dx < 0 && idx < TABS_ORDEN.length - 1) {
-      // swipe izquierda → tab siguiente
-      cambiarTab(TABS_ORDEN[idx + 1]);
+      // swipe izquierda → tab siguiente → entra desde la derecha
+      cambiarTab(TABS_ORDEN[idx + 1], "der");
     } else if (dx > 0 && idx > 0) {
-      // swipe derecha → tab anterior
-      cambiarTab(TABS_ORDEN[idx - 1]);
+      // swipe derecha → tab anterior → entra desde la izquierda
+      cambiarTab(TABS_ORDEN[idx - 1], "izq");
     }
   }, { passive: true });
 })();

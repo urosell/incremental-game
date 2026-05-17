@@ -495,7 +495,7 @@ body {
   color: var(--sc-white);
   border: none;
   padding: 9px 0;
-  width: 110px;
+  width: 100px;
   text-align: center;
   font-family: var(--fuente-titulo);
   font-size: 14px;
@@ -522,7 +522,7 @@ body {
   color: var(--sc-gold);
   border: 2px solid var(--sc-gold);
   padding: 7px 0;
-  width: 110px;
+  width: 100px;
   text-align: center;
   font-family: var(--fuente-titulo);
   font-size: 14px;
@@ -2252,6 +2252,18 @@ body {
    NAV MOBILE — oculto en desktop
    ══════════════════════════════════════════ */
 #nav-mobile { display: none; }
+
+/* ── Animaciones de transición entre tabs (swipe) ── */
+@keyframes tab-entra-derecha {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes tab-entra-izquierda {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+.tab-slide-derecha   { animation: tab-entra-derecha   0.22s ease-out both; }
+.tab-slide-izquierda { animation: tab-entra-izquierda 0.22s ease-out both; }
 
 /* ══════════════════════════════════════════
    MOBILE — layout por tabs (< 1024px)

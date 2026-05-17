@@ -536,7 +536,7 @@ export function mostrarInfoPanel(parcela) {
       </div>
       <button class="ciudad-info-cerrar" data-accion="cerrar-ciudad-info">✕</button>
     </div>
-    ${nivel > 0 ? `<div class="ciudad-info-prod">${formatear(produccionBase(colId, nivel))} ⚡/seg</div>` : `<div class="ciudad-info-prod ciudad-info-inactivo">Sin organizar</div>`}
+    ${nivel > 0 ? `<div class="ciudad-info-prod">${formatear(produccionBase(colId, nivel))} ⚡/s</div>` : `<div class="ciudad-info-prod ciudad-info-inactivo">Sin organizar</div>`}
     ${botonHTML}
   `;
 

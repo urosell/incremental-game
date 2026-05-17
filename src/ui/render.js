@@ -16,7 +16,7 @@ export function renderizar() {
     formatear(estado.conciencia) + " ⚡";
   const ingresoDisplay = document.getElementById("ingreso-display");
   if (ingresoDisplay) ingresoDisplay.textContent =
-    formatear(estado.concienciaPorSegundo) + " ⚡ / seg";
+    formatear(estado.concienciaPorSegundo) + " ⚡/s";
 
   // Botones colectivos
   estado.colectivos.forEach(col => {

@@ -172,7 +172,6 @@ export function obtenerTasaPresion() {
   if (estado.mejorasResistencia.includes("fondo-solidaridad")) tasa *= 0.70;
   if (estado.mejorasResistencia.includes("red-autodefensa"))   tasa *= 0.70;
   if (estado.mejorasResistencia.includes("contrainformacion")) tasa *= 0.60;
-  tasa *= (1 - obtenerBonusArbol().reduccionPresion);
   return tasa;
 }
 

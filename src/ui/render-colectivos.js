@@ -40,7 +40,7 @@ export function renderizarColectivos() {
       if (estado.efectoTemporal?.tipo === "produccion" && estado.efectoTemporal.expira > Date.now()) {
         p *= estado.efectoTemporal.mult;
       }
-      return formatear(p) + " ⚡/seg";
+      return formatear(p) + " ⚡/s";
     })();
 
     const iconoHTML = datos.imagen

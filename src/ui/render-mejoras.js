@@ -1,5 +1,6 @@
 // ─────────────────────────────────────────
 // RENDER — Panel de Mejoras con subtabs
+// Misma lógica visual que el Árbol Revolucionario
 // ─────────────────────────────────────────
 import { estado } from "../core/estado.js";
 import { formatearCorto, obtenerDescuentoAgitacionMejora } from "../core/calculos.js";
@@ -8,6 +9,8 @@ import {
   MEJORAS_HUELGA,
   MEJORAS_AGITACION,
 } from "../data/mejoras.js";
+
+const LINK = `<div class="arbol-link"></div>`;
 
 let _subtabActual = "resistencia";
 
@@ -54,57 +57,115 @@ export function renderizarMejorasResistencia() { renderizarMejoras(); }
 export function renderizarMejorasHuelga()      { renderizarMejoras(); }
 export function renderizarAgitacion()          { renderizarMejoras(); }
 
+// ─────────────────────────────────────────
+// HELPER — card de mejora de compra única
+// ─────────────────────────────────────────
+function _cardMejora(mejora, comprada, puedePagar, accion, arg) {
+  let accionHTML;
+  if (comprada) {
+    accionHTML = `<div class="arbol-nodo-activo">✓ Activa</div>`;
+  } else {
+    accionHTML = `
+      <button class="btn-nodo-arbol"
+        data-accion="${accion}" data-arg="${arg}"
+        ${!puedePagar ? "disabled" : ""}>
+        ${formatearCorto(mejora.coste)} ⚡
+      </button>
+    `;
+  }
+
+  return `
+    <div class="res-tier-card${comprada ? " res-tier-max" : ""}">
+      <div class="res-tier-header">
+        <span class="res-tier-emoji">${mejora.emoji}</span>
+        <div class="res-tier-info">
+          <div class="res-tier-nombre">${mejora.nombre}</div>
+          <div class="res-tier-desc">${mejora.descripcion}</div>
+        </div>
+        ${comprada
+          ? `<div class="res-tier-nivel" style="color:var(--sc-green)">✓</div>`
+          : `<div class="res-tier-nivel">${formatearCorto(mejora.coste)} ⚡</div>`}
+      </div>
+      <div class="res-tier-accion">${accionHTML}</div>
+    </div>
+  `;
+}
+
 // ── Resistencia ─────────────────────────────
 function _renderResistencia() {
-  const items = MEJORAS_RESISTENCIA.map(mejora => {
-    const comprada = estado.mejorasResistencia.includes(mejora.id);
+  const cards = MEJORAS_RESISTENCIA.map((mejora, i) => {
+    const comprada   = estado.mejorasResistencia.includes(mejora.id);
+    const puedePagar = estado.conciencia >= mejora.coste;
     return `
-      <div class="mejora-resistencia ${comprada ? "comprada" : ""}">
-        <span class="mejora-nombre" title="${mejora.descripcion}">${mejora.emoji} ${mejora.nombre}</span>
-        <button class="btn-mejora-resistencia"
-          data-accion="comprar-mejora-resistencia" data-arg="${mejora.id}"
-          ${comprada || estado.conciencia < mejora.coste ? "disabled" : ""}>
-          ${comprada ? "✓ Activa" : formatearCorto(mejora.coste) + " ⚡"}
-        </button>
-      </div>
+      ${i > 0 ? LINK : ""}
+      ${_cardMejora(mejora, comprada, puedePagar, "comprar-mejora-resistencia", mejora.id)}
     `;
   }).join("");
 
-  return `<div class="mejoras-seccion" id="mejoras-resistencia">${items}</div>`;
+  return `
+    <div class="arbol-tree">
+      <div class="arbol-raiz">
+        <span class="arbol-raiz-emoji">🛡️</span>
+        <span class="arbol-raiz-label">RESISTENCIA</span>
+      </div>
+      ${LINK}
+      ${cards}
+    </div>
+  `;
 }
 
 // ── Agitación ───────────────────────────────
 function _renderAgitacion() {
-  const nivel     = estado.nivelAgitacion;
-  const siguiente = nivel < MEJORAS_AGITACION.length ? MEJORAS_AGITACION[nivel] : null;
+  const nivel      = estado.nivelAgitacion;
+  const maxNivel   = MEJORAS_AGITACION.length;
+  const siguiente  = nivel < maxNivel ? MEJORAS_AGITACION[nivel] : null;
+  const actual     = nivel > 0 ? MEJORAS_AGITACION[nivel - 1] : null;
+  const progresoPct = (nivel / maxNivel) * 100;
 
-  const botonHTML = siguiente ? (() => {
+  let accionHTML;
+  if (!siguiente) {
+    accionHTML = `<div class="arbol-nodo-activo">✓ Máximo — ${formatearCorto(actual.poderClic)} ⚡/clic</div>`;
+  } else {
     const descuento  = obtenerDescuentoAgitacionMejora();
     const costeReal  = Math.floor(siguiente.coste * (1 - descuento));
     const hayDesc    = descuento > 0;
     const costeHTML  = hayDesc
-      ? `<span class="btn-agitacion-coste"><s>${formatearCorto(siguiente.coste)}</s> ${formatearCorto(costeReal)} ⚡</span>`
-      : `<span class="btn-agitacion-coste">${formatearCorto(costeReal)} ⚡</span>`;
-    return `
-      <button class="btn-agitacion-icono"
+      ? `<s>${formatearCorto(siguiente.coste)}</s> ${formatearCorto(costeReal)} ⚡`
+      : `${formatearCorto(costeReal)} ⚡`;
+
+    accionHTML = `
+      <div class="res-tier-preview">
+        Ahora: <strong>${actual ? formatearCorto(actual.poderClic) : 1} ⚡/clic</strong>
+        → Nv.${nivel + 1}: <strong>${formatearCorto(siguiente.poderClic)} ⚡/clic</strong>
+      </div>
+      <button class="btn-nodo-arbol"
         data-accion="mejorar-agitacion"
         ${estado.conciencia < costeReal ? "disabled" : ""}>
-        ${costeHTML}
-        <img src="Imagenes/Mejoras/Fuerza_Agitacion.png" alt="Fuerza de Agitación" draggable="false">
+        Nv.${nivel + 1} · ${costeHTML}
       </button>
     `;
-  })() : `
-    <div class="btn-agitacion-icono btn-agitacion-maximo">
-      <span class="btn-agitacion-coste">Máximo</span>
-      <img src="Imagenes/Mejoras/Fuerza_Agitacion.png" alt="Fuerza de Agitación" draggable="false">
-    </div>
-  `;
+  }
 
   return `
-    <div class="mejoras-seccion" id="mejoras-agitacion">
-      <div class="agitacion-icono-wrapper">
-        ${botonHTML}
-        <div class="agitacion-nivel">Nv. ${nivel} / ${MEJORAS_AGITACION.length}</div>
+    <div class="arbol-tree">
+      <div class="arbol-raiz">
+        <span class="arbol-raiz-emoji">✊</span>
+        <span class="arbol-raiz-label">AGITACIÓN</span>
+      </div>
+      ${LINK}
+      <div class="res-tier-card${!siguiente ? " res-tier-max" : ""}">
+        <div class="res-tier-header">
+          <span class="res-tier-emoji">⚡</span>
+          <div class="res-tier-info">
+            <div class="res-tier-nombre">Fuerza de Agitación</div>
+            <div class="res-tier-desc">Aumenta el poder de clic manual</div>
+          </div>
+          <div class="res-tier-nivel">Nv. ${nivel}/${maxNivel}</div>
+        </div>
+        <div class="prod-barra-wrap">
+          <div class="prod-barra-fill" style="width:${progresoPct}%; background: var(--sc-red);"></div>
+        </div>
+        <div class="res-tier-accion">${accionHTML}</div>
       </div>
     </div>
   `;
@@ -112,19 +173,23 @@ function _renderAgitacion() {
 
 // ── Huelga ──────────────────────────────────
 function _renderHuelga() {
-  const items = MEJORAS_HUELGA.map(mejora => {
-    const comprada = (estado.mejorasHuelga || []).includes(mejora.id);
+  const cards = MEJORAS_HUELGA.map((mejora, i) => {
+    const comprada   = (estado.mejorasHuelga || []).includes(mejora.id);
+    const puedePagar = estado.conciencia >= mejora.coste;
     return `
-      <div class="mejora-resistencia ${comprada ? "comprada" : ""}">
-        <span class="mejora-nombre" title="${mejora.descripcion}">${mejora.emoji} ${mejora.nombre}</span>
-        <button class="btn-mejora-resistencia"
-          data-accion="comprar-mejora-huelga" data-arg="${mejora.id}"
-          ${comprada || estado.conciencia < mejora.coste ? "disabled" : ""}>
-          ${comprada ? "✓ Activa" : formatearCorto(mejora.coste) + " ⚡"}
-        </button>
-      </div>
+      ${i > 0 ? LINK : ""}
+      ${_cardMejora(mejora, comprada, puedePagar, "comprar-mejora-huelga", mejora.id)}
     `;
   }).join("");
 
-  return `<div class="mejoras-seccion" id="mejoras-huelga">${items}</div>`;
+  return `
+    <div class="arbol-tree">
+      <div class="arbol-raiz">
+        <span class="arbol-raiz-emoji">🪧</span>
+        <span class="arbol-raiz-label">HUELGA GENERAL</span>
+      </div>
+      ${LINK}
+      ${cards}
+    </div>
+  `;
 }
