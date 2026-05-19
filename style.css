@@ -336,6 +336,18 @@ body {
 #btn-agitar:hover  { background: var(--sc-red-bright); }
 #btn-agitar:active { transform: scale(0.97); background: var(--sc-red-dark); }
 
+@keyframes agitar-shake {
+  0%   { transform: translateX(0)    rotate(0);      }
+  20%  { transform: translateX(-4px) rotate(-1.5deg);}
+  40%  { transform: translateX(4px)  rotate(1.5deg); }
+  60%  { transform: translateX(-3px) rotate(-1deg);  }
+  80%  { transform: translateX(3px)  rotate(1deg);   }
+  100% { transform: translateX(0)    rotate(0);      }
+}
+#btn-agitar.agitar-shake {
+  animation: agitar-shake 0.28s ease-out;
+}
+
 #btn-agitar.qte-activo {
   background: var(--sc-gold);
   color: var(--sc-black);

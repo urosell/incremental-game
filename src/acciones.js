@@ -80,9 +80,19 @@ function agitar(e) {
   estado.concienciaTotal += poder;
   spawnClickFx(e.clientX, e.clientY);
   flashConciencia();
+  shakeAgitar();
+  navigator.vibrate?.(20);
   renderizar();
   guardarEstado();
   actualizarBotonRevolucion();
+}
+
+function shakeAgitar() {
+  const btn = document.getElementById("btn-agitar");
+  if (!btn) return;
+  btn.classList.remove("agitar-shake");
+  void btn.offsetWidth;
+  btn.classList.add("agitar-shake");
 }
 
 export function inicializarBtnAgitar() {
