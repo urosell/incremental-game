@@ -81,7 +81,7 @@ function agitar(e) {
   spawnClickFx(e.clientX, e.clientY);
   flashConciencia();
   shakeAgitar();
-  navigator.vibrate?.(20);
+  navigator.vibrate?.(50);
   renderizar();
   guardarEstado();
   actualizarBotonRevolucion();
