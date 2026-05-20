@@ -146,7 +146,7 @@ function _renderArbolAgitacion(consulta) {
   const SECCIONES = [
     {
       id: "mult",
-      emoji: "${CC}",
+      emoji: CC,
       nombre: "Multiplicador de Clic",
       desc: "Aumenta el poder de clic",
       efectoNivel: (n) => `×${(1 + n * AGITACION_CLIC_PCT_POR_NIVEL).toFixed(1)} poder de clic`,

@@ -30,7 +30,7 @@ export function comprarNodoArbol(id) {
 
 // Se invoca desde el botón "🔥 Árbol" del panel izquierdo (modo consulta).
 export function abrirArbolConsulta() {
-  renderizarArbol(true);
+  renderizarArbol();
   document.getElementById("panel-arbol").classList.remove("oculto-panel");
   document.getElementById("panel-arbol-fondo").classList.remove("oculto");
 }
@@ -63,7 +63,7 @@ export function subirNivelResilienciaTier(tierId) {
   legado.llamas -= RESILIENCIA_TIER_COSTE_POR_NIVEL;
   niveles[tierId] = nivelActual + 1;
   guardarLegado();
-  renderizarArbol(true);
+  renderizarArbol();
 
   const tier = TIERS_RESILIENCIA.find(t => t.id === tierId);
   const pct  = Math.round((nivelActual + 1) * 3);
@@ -90,7 +90,7 @@ export function subirNivelAgitacionClic(seccion) {
   legado.llamas -= AGITACION_CLIC_COSTE_POR_NIVEL;
   niveles[seccion] = nivelActual + 1;
   guardarLegado();
-  renderizarArbol(true);
+  renderizarArbol();
 
   const nombres = { mult: "Multiplicador de Clic", inicio: "Inicio con Agitación", heroes: "Héroes Agitan" };
   mostrarNotificacion(`${CC} ${nombres[seccion]} Nv.${nivelActual + 1} desbloqueado.`);
@@ -107,7 +107,7 @@ export function subirNivelAgitacionCoste() {
   legado.llamas -= AGITACION_COSTE_POR_NIVEL;
   legado.nivelAgitacionCoste = nivelActual + 1;
   guardarLegado();
-  renderizarArbol(true);
+  renderizarArbol();
 
   const pct = (nivelActual + 1) * 10;
   mostrarNotificacion(`⚙️ Organización Nv.${nivelActual + 1} — coste de mejoras −${pct}%`);
